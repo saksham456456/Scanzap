@@ -29,6 +29,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
 
 <!-- ════ Razorpay ════ -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -702,11 +703,12 @@ const PLAN_DAYS     = 30;
 </script>
 
 <script>
-let db, auth, googleProvider, firebaseReady = false;
+let db, auth, functions, googleProvider, firebaseReady = false;
 try {
   firebase.initializeApp(FIREBASE_CONFIG);
   auth = firebase.auth();
   db   = firebase.firestore();
+  functions = firebase.functions();
   googleProvider = new firebase.auth.GoogleAuthProvider();
   firebaseReady = true;
 } catch(e) {
@@ -1003,54 +1005,73 @@ async function startPayment() {
   if (payTxt) payTxt.style.display = 'none';
   if (paySpin) paySpin.style.display = 'inline-block';
 
-  const options = {
-    key: RAZORPAY_KEY, amount: PLAN_AMOUNT, currency: 'INR',
-    name: 'QRForge', description: 'Pro Plan — 30 Days Access',
-    handler: async function(response) { await grantPro(response.razorpay_payment_id); },
-    prefill: { name: currentUser.displayName || '', email: currentUser.email || '' },
-    notes: { uid: currentUser.uid },
-    theme: { color: '#7C5CF5' },
-    modal: { ondismiss: () => {
+  try {
+    // 1. Ask backend to create a Razorpay Order
+    const createOrderFn = functions.httpsCallable('createRazorpayOrder');
+    const orderResult = await createOrderFn({ amount: PLAN_AMOUNT });
+    const { orderId } = orderResult.data;
+
+    // 2. Initialize Razorpay Checkout
+    const options = {
+      key: RAZORPAY_KEY,
+      amount: PLAN_AMOUNT,
+      currency: 'INR',
+      name: 'QRForge',
+      description: 'Pro Plan — 30 Days Access',
+      order_id: orderId, // Pass the backend-generated order ID
+      handler: async function(response) {
+        // 3. Instead of updating DB directly, verify payment server-side
+        try {
+          const verifyPaymentFn = functions.httpsCallable('verifyRazorpayPayment');
+          await verifyPaymentFn({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature
+          });
+
+          // If successful, reload Pro status to reflect the backend changes
+          await loadProStatus(currentUser.uid);
+          applyProUI();
+          renderNavUser(currentUser);
+
+          if (payBtn) payBtn.disabled = false;
+          if (payTxt) { payTxt.style.display = ''; payTxt.textContent = '✦ Pro Active — Thank You!'; }
+          if (paySpin) paySpin.style.display = 'none';
+
+          toast('🎉 Welcome to Pro! All features are now unlocked.','gold');
+        } catch (verifyError) {
+          console.error("Payment verification failed:", verifyError);
+          toast('Payment verification failed. If money was deducted, please contact support.', 'err');
+          if (payBtn) payBtn.disabled = false;
+          if (payTxt) payTxt.style.display = '';
+          if (paySpin) paySpin.style.display = 'none';
+        }
+      },
+      prefill: { name: currentUser.displayName || '', email: currentUser.email || '' },
+      notes: { uid: currentUser.uid },
+      theme: { color: '#7C5CF5' },
+      modal: { ondismiss: () => {
+        if (payBtn) payBtn.disabled = false;
+        if (payTxt) payTxt.style.display = '';
+        if (paySpin) paySpin.style.display = 'none';
+      }}
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', (r) => {
+      toast('Payment failed: ' + (r.error.description || 'Please try again.'),'err');
       if (payBtn) payBtn.disabled = false;
       if (payTxt) payTxt.style.display = '';
       if (paySpin) paySpin.style.display = 'none';
-    }}
-  };
-
-  const rzp = new Razorpay(options);
-  rzp.on('payment.failed', (r) => {
-    toast('Payment failed: ' + (r.error.description || 'Please try again.'),'err');
+    });
+    rzp.open();
+  } catch (error) {
+    console.error("Error starting payment:", error);
+    toast('Could not initialize payment. Please try again later.', 'err');
     if (payBtn) payBtn.disabled = false;
     if (payTxt) payTxt.style.display = '';
     if (paySpin) paySpin.style.display = 'none';
-  });
-  rzp.open();
-}
-
-async function grantPro(paymentId) {
-  const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + PLAN_DAYS);
-
-  await db.collection('users').doc(currentUser.uid).set({
-    isPro: true,
-    proExpiresAt: firebase.firestore.Timestamp.fromDate(expiresAt),
-    lastPaymentId: paymentId,
-    email: currentUser.email,
-    displayName: currentUser.displayName,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
-
-  isPro = true; proExpiry = expiresAt;
-  applyProUI(); renderNavUser(currentUser);
-
-  const payBtn = document.getElementById('pay-btn');
-  const payTxt = document.getElementById('pay-btn-txt');
-  const paySpin = document.getElementById('pay-spin');
-  if (payBtn) payBtn.disabled = false;
-  if (payTxt) { payTxt.style.display = ''; payTxt.textContent = '✦ Pro Active — Thank You!'; }
-  if (paySpin) paySpin.style.display = 'none';
-
-  toast('🎉 Welcome to Pro! All features are now unlocked.','gold');
+  }
 }
 
 function switchTab(type, btn) {
