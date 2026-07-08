@@ -5,30 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- ════ SEO ════ -->
-<title>Free QR Code Generator Online — QRForge</title>
+<title>Free QR Code Generator Online — ScanZap</title>
 <meta name="description" content="Generate free QR codes instantly for URLs, text, WiFi, email, phone, and contacts. No signup required. High-resolution PNG download. Fast, free, forever.">
 <meta name="keywords" content="free qr code generator, qr code maker online, create qr code, qr code generator free, wifi qr code, url qr code, qr code download png">
 <meta name="robots" content="index, follow">
-<meta name="author" content="QRForge">
-<link rel="canonical" href="https://qrforge.in/">
+<meta name="author" content="ScanZap">
+<link rel="canonical" href="https://scanzap.in/">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://qrforge.in/">
-<meta property="og:title" content="Free QR Code Generator Online — QRForge">
+<meta property="og:url" content="https://scanzap.in/">
+<meta property="og:title" content="Free QR Code Generator Online — ScanZap">
 <meta property="og:description" content="Create QR codes for URLs, WiFi, email, contacts and more. Instant download. No signup. Free forever.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Free QR Code Generator — QRForge">
+<meta name="twitter:title" content="Free QR Code Generator — ScanZap">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"QRForge","url":"https://qrforge.in","description":"Free online QR code generator for URLs, text, email, phone, WiFi, and vCard contacts.","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+{"@context":"https://schema.org","@type":"WebApplication","name":"ScanZap","url":"https://scanzap.in","description":"Free online QR code generator for URLs, text, email, phone, WiFi, and vCard contacts.","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is QRForge really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. QRForge is 100% free for PNG downloads with no account needed. Pro adds SVG, logo embedding, and larger exports."}},{"@type":"Question","name":"Do QR codes expire?","acceptedAnswer":{"@type":"Answer","text":"No. Static QR codes never expire and work as long as the destination is valid."}},{"@type":"Question","name":"What types of QR codes can I create?","acceptedAnswer":{"@type":"Answer","text":"URL, plain text, email, phone number, WiFi network, and vCard contact cards."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is ScanZap really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. ScanZap is 100% free for PNG downloads with no account needed. Pro adds SVG, logo embedding, and larger exports."}},{"@type":"Question","name":"Do QR codes expire?","acceptedAnswer":{"@type":"Answer","text":"No. Static QR codes never expire and work as long as the destination is valid."}},{"@type":"Question","name":"What types of QR codes can I create?","acceptedAnswer":{"@type":"Answer","text":"URL, plain text, email, phone number, WiFi network, and vCard contact cards."}}]}
 </script>
 
 <!-- ════ Firebase v9 Compat ════ -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
 
 <!-- ════ Razorpay ════ -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -55,8 +56,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:
 
 nav{position:sticky;top:0;z-index:200;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(7,7,14,.85);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border);}
 .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-weight:800;font-size:20px;color:var(--text);text-decoration:none;}
-.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:9px;display:grid;place-items:center;font-size:18px;}
-.logo em{color:var(--primary);font-style:normal;}
 .nav-links{display:flex;align-items:center;gap:28px;list-style:none;}
 .nav-links a{font-size:14px;font-weight:500;color:var(--text-muted);text-decoration:none;transition:color .2s;}
 .nav-links a:hover{color:var(--text);}
@@ -250,9 +249,7 @@ input[type="color"]{width:26px;height:26px;border:none;border-radius:5px;padding
 .ft-wrap{border-top:1px solid var(--border);margin-top:80px;}
 footer{max-width:1180px;margin:0 auto;padding:44px 24px 32px;}
 .ft-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:36px;}
-.ft-logo{display:flex;align-items:center;gap:9px;font-family:var(--font-d);font-weight:800;font-size:18px;color:var(--text);}
-.ft-logo-mark{width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:7px;display:grid;place-items:center;font-size:14px;}
-.ft-logo em{color:var(--primary);font-style:normal;}
+.ft-logo{display:flex;align-items:center;}
 .ft-links{display:flex;gap:24px;list-style:none;}
 .ft-links a{color:var(--text-muted);text-decoration:none;font-size:14px;transition:color .2s;}
 .ft-links a:hover{color:var(--text);}
@@ -352,8 +349,7 @@ footer{max-width:1180px;margin:0 auto;padding:44px 24px 32px;}
 
 <nav>
   <a href="/" class="logo">
-    <div class="logo-mark">⚡</div>
-    QR<em>Forge</em>
+    <img src="/scanzap-logo.png" alt="ScanZap Logo" style="height:34px;width:auto;">
   </a>
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
@@ -522,7 +518,7 @@ footer{max-width:1180px;margin:0 auto;padding:44px 24px 32px;}
 </div>
 
 <section class="sec" id="features">
-  <div class="sec-eye">Why QRForge</div>
+  <div class="sec-eye">Why ScanZap</div>
   <h2 class="sec-h">Everything You Need,<br>Nothing You Don't</h2>
   <p class="sec-sub">Built for speed, simplicity, and real-world use cases.</p>
   <div class="feat-grid">
@@ -549,7 +545,7 @@ footer{max-width:1180px;margin:0 auto;padding:44px 24px 32px;}
 <section class="sec" id="use-cases">
   <div class="sec-eye">Use Cases</div>
   <h2 class="sec-h">Built for Every Situation</h2>
-  <p class="sec-sub">Where QRForge users apply their codes most.</p>
+  <p class="sec-sub">Where ScanZap users apply their codes most.</p>
   <div class="cases">
     <div class="case"><div class="case-ic">🍽️</div><h4>Restaurant Menus</h4><p>Replace paper menus with a scannable digital version.</p></div>
     <div class="case"><div class="case-ic">📶</div><h4>WiFi Sharing</h4><p>Print and frame it next to your router for instant guest access.</p></div>
@@ -621,15 +617,15 @@ footer{max-width:1180px;margin:0 auto;padding:44px 24px 32px;}
 <section class="sec" id="faq">
   <div class="sec-eye">FAQ</div>
   <h2 class="sec-h">Common Questions</h2>
-  <p class="sec-sub">Everything you need to know about QRForge.</p>
+  <p class="sec-sub">Everything you need to know about ScanZap.</p>
   <div class="faq-list">
     <div class="faq-item">
-      <button class="faq-q" onclick="faqToggle(this)">Is QRForge really free? <div class="faq-chev">▾</div></button>
+      <button class="faq-q" onclick="faqToggle(this)">Is ScanZap really free? <div class="faq-chev">▾</div></button>
       <div class="faq-a"><div class="faq-a-in">Yes. Generate unlimited QR codes and download PNG files with no account and no payment. Pro adds SVG export, logo embedding, and XL download sizes for ₹99/month.</div></div>
     </div>
     <div class="faq-item">
-      <button class="faq-q" onclick="faqToggle(this)">Do QR codes from QRForge expire? <div class="faq-chev">▾</div></button>
-      <div class="faq-a"><div class="faq-a-in">No. QRForge generates static QR codes — the data is encoded directly into the image. They work forever as long as your destination URL or content remains valid. We don't host or track your codes.</div></div>
+      <button class="faq-q" onclick="faqToggle(this)">Do QR codes from ScanZap expire? <div class="faq-chev">▾</div></button>
+      <div class="faq-a"><div class="faq-a-in">No. ScanZap generates static QR codes — the data is encoded directly into the image. They work forever as long as your destination URL or content remains valid. We don't host or track your codes.</div></div>
     </div>
     <div class="faq-item">
       <button class="faq-q" onclick="faqToggle(this)">What payment methods does Pro accept? <div class="faq-chev">▾</div></button>
@@ -644,7 +640,7 @@ footer{max-width:1180px;margin:0 auto;padding:44px 24px 32px;}
       <div class="faq-a"><div class="faq-a-in">We use Google Sign-In to link your payment to your account. This is what lets us remember that you're a Pro user and unlock features when you return. Free use requires no account.</div></div>
     </div>
     <div class="faq-item">
-      <button class="faq-q" onclick="faqToggle(this)">Does QRForge store my data? <div class="faq-chev">▾</div></button>
+      <button class="faq-q" onclick="faqToggle(this)">Does ScanZap store my data? <div class="faq-chev">▾</div></button>
       <div class="faq-a"><div class="faq-a-in">No. QR content is not stored on our servers. We only store your account info (name, email) and Pro status in Firebase. We never sell your data.</div></div>
     </div>
   </div>
@@ -653,7 +649,7 @@ footer{max-width:1180px;margin:0 auto;padding:44px 24px 32px;}
 <div class="ft-wrap">
   <footer>
     <div class="ft-top">
-      <div class="ft-logo"><div class="ft-logo-mark">⚡</div>QR<em>Forge</em></div>
+      <div class="ft-logo"><img src="/scanzap-logo.png" alt="ScanZap Logo" style="height:28px;width:auto;"></div>
       <ul class="ft-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#pricing">Pricing</a></li>
@@ -663,7 +659,7 @@ footer{max-width:1180px;margin:0 auto;padding:44px 24px 32px;}
       </ul>
     </div>
     <div class="ft-bottom">
-      <span>© 2025 QRForge · Free QR Code Generator · Made in India 🇮🇳</span>
+      <span>© 2025 ScanZap · Free QR Code Generator · Made in India 🇮🇳</span>
       <span class="ft-badge">⚡ 100% Free Forever</span>
     </div>
   </footer>
@@ -702,11 +698,12 @@ const PLAN_DAYS     = 30;
 </script>
 
 <script>
-let db, auth, googleProvider, firebaseReady = false;
+let db, auth, functions, googleProvider, firebaseReady = false;
 try {
   firebase.initializeApp(FIREBASE_CONFIG);
   auth = firebase.auth();
   db   = firebase.firestore();
+  functions = firebase.functions();
   googleProvider = new firebase.auth.GoogleAuthProvider();
   firebaseReady = true;
 } catch(e) {
@@ -1003,54 +1000,73 @@ async function startPayment() {
   if (payTxt) payTxt.style.display = 'none';
   if (paySpin) paySpin.style.display = 'inline-block';
 
-  const options = {
-    key: RAZORPAY_KEY, amount: PLAN_AMOUNT, currency: 'INR',
-    name: 'QRForge', description: 'Pro Plan — 30 Days Access',
-    handler: async function(response) { await grantPro(response.razorpay_payment_id); },
-    prefill: { name: currentUser.displayName || '', email: currentUser.email || '' },
-    notes: { uid: currentUser.uid },
-    theme: { color: '#7C5CF5' },
-    modal: { ondismiss: () => {
+  try {
+    // 1. Ask backend to create a Razorpay Order
+    const createOrderFn = functions.httpsCallable('createRazorpayOrder');
+    const orderResult = await createOrderFn({ amount: PLAN_AMOUNT });
+    const { orderId } = orderResult.data;
+
+    // 2. Initialize Razorpay Checkout
+    const options = {
+      key: RAZORPAY_KEY,
+      amount: PLAN_AMOUNT,
+      currency: 'INR',
+      name: 'ScanZap',
+      description: 'Pro Plan — 30 Days Access',
+      order_id: orderId, // Pass the backend-generated order ID
+      handler: async function(response) {
+        // 3. Instead of updating DB directly, verify payment server-side
+        try {
+          const verifyPaymentFn = functions.httpsCallable('verifyRazorpayPayment');
+          await verifyPaymentFn({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature
+          });
+
+          // If successful, reload Pro status to reflect the backend changes
+          await loadProStatus(currentUser.uid);
+          applyProUI();
+          renderNavUser(currentUser);
+
+          if (payBtn) payBtn.disabled = false;
+          if (payTxt) { payTxt.style.display = ''; payTxt.textContent = '✦ Pro Active — Thank You!'; }
+          if (paySpin) paySpin.style.display = 'none';
+
+          toast('🎉 Welcome to Pro! All features are now unlocked.','gold');
+        } catch (verifyError) {
+          console.error("Payment verification failed:", verifyError);
+          toast('Payment verification failed. If money was deducted, please contact support.', 'err');
+          if (payBtn) payBtn.disabled = false;
+          if (payTxt) payTxt.style.display = '';
+          if (paySpin) paySpin.style.display = 'none';
+        }
+      },
+      prefill: { name: currentUser.displayName || '', email: currentUser.email || '' },
+      notes: { uid: currentUser.uid },
+      theme: { color: '#7C5CF5' },
+      modal: { ondismiss: () => {
+        if (payBtn) payBtn.disabled = false;
+        if (payTxt) payTxt.style.display = '';
+        if (paySpin) paySpin.style.display = 'none';
+      }}
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', (r) => {
+      toast('Payment failed: ' + (r.error.description || 'Please try again.'),'err');
       if (payBtn) payBtn.disabled = false;
       if (payTxt) payTxt.style.display = '';
       if (paySpin) paySpin.style.display = 'none';
-    }}
-  };
-
-  const rzp = new Razorpay(options);
-  rzp.on('payment.failed', (r) => {
-    toast('Payment failed: ' + (r.error.description || 'Please try again.'),'err');
+    });
+    rzp.open();
+  } catch (error) {
+    console.error("Error starting payment:", error);
+    toast('Could not initialize payment. Please try again later.', 'err');
     if (payBtn) payBtn.disabled = false;
     if (payTxt) payTxt.style.display = '';
     if (paySpin) paySpin.style.display = 'none';
-  });
-  rzp.open();
-}
-
-async function grantPro(paymentId) {
-  const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + PLAN_DAYS);
-
-  await db.collection('users').doc(currentUser.uid).set({
-    isPro: true,
-    proExpiresAt: firebase.firestore.Timestamp.fromDate(expiresAt),
-    lastPaymentId: paymentId,
-    email: currentUser.email,
-    displayName: currentUser.displayName,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
-
-  isPro = true; proExpiry = expiresAt;
-  applyProUI(); renderNavUser(currentUser);
-
-  const payBtn = document.getElementById('pay-btn');
-  const payTxt = document.getElementById('pay-btn-txt');
-  const paySpin = document.getElementById('pay-spin');
-  if (payBtn) payBtn.disabled = false;
-  if (payTxt) { payTxt.style.display = ''; payTxt.textContent = '✦ Pro Active — Thank You!'; }
-  if (paySpin) paySpin.style.display = 'none';
-
-  toast('🎉 Welcome to Pro! All features are now unlocked.','gold');
+  }
 }
 
 function switchTab(type, btn) {
@@ -1266,7 +1282,7 @@ async function dlPNG() {
     if (isPro && curData.dataUrl) {
       const a = document.createElement('a');
       a.href = curData.dataUrl;
-      a.download = `qrforge-logo-${curSize}px.png`;
+      a.download = `scanzap-logo-${curSize}px.png`;
       a.click();
       toast('Downloaded!', 'ok');
       return;
@@ -1275,7 +1291,7 @@ async function dlPNG() {
     const blob = await res.blob();
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `qrforge-${curSize}px.png`;
+    a.download = `scanzap-${curSize}px.png`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
     toast('Downloaded!', 'ok');
@@ -1292,7 +1308,7 @@ async function dlSVG() {
     const blob = await res.blob();
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `qrforge-${curSize}px.svg`;
+    a.download = `scanzap-${curSize}px.svg`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
     toast('SVG downloaded!', 'gold');
