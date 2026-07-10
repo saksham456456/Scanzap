@@ -16,10 +16,10 @@ const razorpay = new Razorpay({
 
 // Pack definitions (Source of truth)
 const PACKS = {
-  starter: { credits: 25, amount: 4900 },
-  creator: { credits: 80, amount: 12900 },
-  studio:  { credits: 200, amount: 24900 },
-  agency:  { credits: 600, amount: 59900 }
+  starter: { credits: 25, amount: 999 },
+  creator: { credits: 80, amount: 2499 },
+  studio:  { credits: 200, amount: 4999 },
+  agency:  { credits: 600, amount: 9999 }
 };
 
 exports.createCreditOrder = functions.https.onCall(async (data, context) => {
@@ -36,7 +36,7 @@ exports.createCreditOrder = functions.https.onCall(async (data, context) => {
   try {
     const options = {
       amount: pack.amount,
-      currency: "INR",
+      currency: "USD",
       receipt: `receipt_${context.auth.uid}_${Date.now()}`
     };
 
@@ -57,7 +57,7 @@ exports.verifyCreditPayment = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError('unauthenticated', 'User must be logged in.');
   }
 
-  const { packId, razorpay_payment_id, razorpay_order_id, razorpay_signature, bypassTest } = data;
+  const { packId, razorpay_payment_id, razorpay_order_id, razorpay_signature } = data;
   const pack = PACKS[packId];
 
   if (!pack || !razorpay_payment_id || !razorpay_order_id) {
@@ -65,7 +65,8 @@ exports.verifyCreditPayment = functions.https.onCall(async (data, context) => {
   }
 
   // 1. Verify the signature (unless bypassing in test environment)
-  if (bypassTest === true) {
+  const isTestMode = process.env.TEST_MODE === 'true';
+  if (isTestMode) {
     console.log("Bypassing signature validation for testing.");
   } else {
     if (!razorpay_signature) throw new functions.https.HttpsError('invalid-argument', 'Missing signature.');
