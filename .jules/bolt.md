@@ -1,0 +1,3 @@
+## 2024-07-10 - Memoization of QR generation parameters
+**Learning:** In a single-file application without virtual DOM or reactive state frameworks, debouncing input is not always enough because consecutive renders triggered by tab switching, blur events, or identical data updates can fire duplicate network requests to external APIs (like image generation).
+**Action:** Implemented state caching (memoization) by tracking `lastGeneratedUrl` and `lastLogoDataUrl` inside the main render loop to early-return before hitting external services like `api.qrserver.com`, saving bandwidth and making the UI snappier.

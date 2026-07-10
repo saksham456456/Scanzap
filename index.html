@@ -64,10 +64,10 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
 
 <!-- ════ Razorpay ════ -->
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
 <!-- jsQR for scanning test -->
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js" defer></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -714,27 +714,27 @@ img {
 
   <div class="tpl-grid">
     <div class="tpl-card" onclick="applyTemplate('wifi-guest')">
-      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=WIFI:S:GuestNetwork;T:WPA;P:guest123;;;&size=100x100" alt="WiFi QR"></div>
+      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=WIFI:S:GuestNetwork;T:WPA;P:guest123;;;&size=100x100" alt="WiFi QR" loading="lazy"></div>
       <div class="tpl-info"><h4>WiFi Guest Access</h4><p>Pre-filled WiFi tab</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('menu')">
-      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://example.com/menu&size=100x100&color=00D4AA" alt="Menu QR"></div>
+      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://example.com/menu&size=100x100&color=00D4AA" alt="Menu QR" loading="lazy"></div>
       <div class="tpl-info"><h4>Restaurant Menu</h4><p>Teal colored URL QR</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('bizcard')">
-      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=BEGIN:VCARD%0AVERSION:3.0%0A&size=100x100" alt="vCard QR"></div>
+      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=BEGIN:VCARD%0AVERSION:3.0%0A&size=100x100" alt="vCard QR" loading="lazy"></div>
       <div class="tpl-info"><h4>Business Card</h4><p>vCard contact info</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('paypal')">
-      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://paypal.me/username&size=100x100" alt="PayPal QR"></div>
+      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://paypal.me/username&size=100x100" alt="PayPal QR" loading="lazy"></div>
       <div class="tpl-info"><h4>PayPal Payment</h4><p>Pre-filled PayPal link</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('insta')">
-      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://instagram.com/&size=100x100" alt="Insta QR"></div>
+      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://instagram.com/&size=100x100" alt="Insta QR" loading="lazy"></div>
       <div class="tpl-info"><h4>Instagram Profile</h4><p>Pre-filled URL tab</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('app')">
-      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://play.google.com/store/apps/details?id=&size=100x100" alt="App QR"></div>
+      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://play.google.com/store/apps/details?id=&size=100x100" alt="App QR" loading="lazy"></div>
       <div class="tpl-info"><h4>App Download</h4><p>Pre-filled Play Store link</p></div>
     </div>
   </div>
@@ -1104,6 +1104,9 @@ let curDataStr = '';
 let curSize = 300;
 let logoFile = null;
 let logoDataUrl = null;
+
+let lastGeneratedUrl = null;
+let lastLogoDataUrl = null;
 
 // ==================== INITIALIZATION ====================
 try {
@@ -1751,6 +1754,14 @@ function generate() {
 
   // Base preview size is always 300
   const url = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(str) + '&color=' + fg + '&bgcolor=' + bg + '&ecc=' + ecc + '&qzone=' + qz;
+
+  if (url === lastGeneratedUrl && logoDataUrl === lastLogoDataUrl) {
+    document.getElementById('qr-skel').classList.remove('show');
+    return;
+  }
+
+  lastGeneratedUrl = url;
+  lastLogoDataUrl = logoDataUrl;
 
   const img = document.getElementById('qr-img');
   const canvas = document.getElementById('qr-canvas');
