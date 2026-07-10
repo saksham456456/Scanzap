@@ -443,12 +443,12 @@ img {
       </div>
     </div>
 
-    <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
+    <button class="hamburger" aria-label="Open mobile menu" onclick="toggleMobileMenu()">☰</button>
   </div>
 </nav>
 
 <div class="mobile-menu" id="mobile-menu">
-  <button class="close-menu" onclick="toggleMobileMenu()">×</button>
+  <button class="close-menu" aria-label="Close mobile menu" onclick="toggleMobileMenu()">×</button>
   <a href="#templates" onclick="toggleMobileMenu()">Templates</a>
   <a href="#shop" onclick="toggleMobileMenu()">Pricing</a>
   <a href="#faq" onclick="toggleMobileMenu()">FAQ</a>
@@ -499,7 +499,7 @@ img {
           <label class="lbl">Website URL</label>
           <input type="text" id="in-url" class="inp" placeholder="e.g. scanzap.in" oninput="queueRender()">
           <div class="link-preview" id="link-preview">
-            <img src="" id="lp-img" alt="">
+            <img src="" id="lp-img" alt="Link preview favicon">
             <div id="lp-text"></div>
           </div>
         </div>
@@ -656,8 +656,8 @@ img {
               <input type="file" id="logo-in" accept="image/png, image/jpeg, image/svg+xml" style="display:none;" onchange="handleLogoUpload(this)">
             </label>
             <div class="logo-preview-wrap" id="logo-preview-wrap">
-              <img src="" id="logo-preview" class="logo-preview">
-              <button class="logo-clear" onclick="clearLogo()" title="Remove logo">×</button>
+              <img src="" id="logo-preview" class="logo-preview" alt="Uploaded logo preview">
+              <button class="logo-clear" aria-label="Remove logo" onclick="clearLogo()" title="Remove logo">×</button>
             </div>
           </div>
         </div>
@@ -975,7 +975,7 @@ img {
 <!-- Modals -->
 <div class="modal-overlay" id="privacy-modal" onclick="closeModal(event,'privacy-modal')">
   <div class="modal">
-    <button class="modal-close" onclick="document.getElementById('privacy-modal').classList.remove('show')">×</button>
+    <button class="modal-close" aria-label="Close modal" onclick="document.getElementById('privacy-modal').classList.remove('show')">×</button>
     <h3 class="modal-h">Privacy & Terms</h3>
     <div style="color:var(--text-muted); font-size:14px; line-height:1.7;">
       <p><strong>Data Collection:</strong> We collect email and display name for registered users via Google Auth. QR content is NOT stored for free guest users. Logged-in users' generated QR codes are saved to their Firebase document for history purposes.</p>
@@ -989,7 +989,7 @@ img {
 
 <div class="modal-overlay" id="dash-modal" onclick="closeModal(event,'dash-modal')">
   <div class="modal dash-modal">
-    <button class="modal-close" onclick="document.getElementById('dash-modal').classList.remove('show')">×</button>
+    <button class="modal-close" aria-label="Close modal" onclick="document.getElementById('dash-modal').classList.remove('show')">×</button>
     <div class="dash-layout">
       <div class="dash-side">
         <button class="d-tab active" data-dtab="overview">Overview</button>
@@ -1054,7 +1054,7 @@ img {
 
 <div class="modal-overlay" id="scan-modal" onclick="closeModal(event,'scan-modal')">
   <div class="modal">
-    <button class="modal-close" onclick="stopScan()">×</button>
+    <button class="modal-close" aria-label="Close modal" onclick="stopScan()">×</button>
     <h3 class="modal-h">Scan QR Code</h3>
     <video id="scan-video"></video>
     <canvas id="scan-canvas"></canvas>
@@ -1064,7 +1064,7 @@ img {
 
 <div class="modal-overlay" id="zero-modal" onclick="closeModal(event,'zero-modal')">
   <div class="modal" style="text-align:center;">
-    <button class="modal-close" onclick="document.getElementById('zero-modal').classList.remove('show')">×</button>
+    <button class="modal-close" aria-label="Close modal" onclick="document.getElementById('zero-modal').classList.remove('show')">×</button>
     <div style="font-size:48px; margin-bottom:16px;">🪙</div>
     <h3 class="modal-h" style="margin-bottom:8px;">Out of Credits!</h3>
     <p style="color:var(--text-muted); font-size:15px; margin-bottom:24px;">You need more credits to perform this action. Top up your balance to continue using premium features.</p>

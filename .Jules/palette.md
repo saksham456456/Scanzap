@@ -1,0 +1,3 @@
+## 2024-07-10 - Symbolic Icon Accessibility
+**Learning:** Found several icon-only buttons (like the hamburger menu '☰' and modal close '×') and dynamically populated placeholder images that lacked accessible labels or alt text. While visual users can infer meaning from the icons, screen readers cannot without an `aria-label` or `alt` text.
+**Action:** Always verify that interactive elements relying solely on visual symbols (e.g., Unicode characters for hamburger menus or 'X' for close) and dynamic image placeholders have explicit `aria-label`s or descriptive `alt` attributes to ensure they are properly announced by assistive technologies.
