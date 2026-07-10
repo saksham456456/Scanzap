@@ -85,6 +85,18 @@ exports.verifyCreditPayment = functions.https.onCall(async (data, context) => {
   try {
     const uid = context.auth.uid;
     const userRef = admin.firestore().collection('users').doc(uid);
+
+    // Check for replay attacks
+    const existingPurchase = await userRef.collection('purchases')
+      .where('razorpayPaymentId', '==', razorpay_payment_id)
+      .limit(1)
+      .get();
+
+    if (!existingPurchase.empty) {
+      console.error('Replay attack detected. Payment ID already processed.');
+      throw new functions.https.HttpsError('already-exists', 'Payment already processed.');
+    }
+
     const purchaseRef = userRef.collection('purchases').doc();
 
     const batch = admin.firestore().batch();

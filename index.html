@@ -1413,7 +1413,8 @@ function toast(msg, type = 'ok') {
   const t = document.createElement('div');
   t.className = 'toast ' + type;
   let ic = type==='ok'?'✓':type==='err'?'✕':'⚡';
-  t.innerHTML = '<span class="toast-ic">' + ic + '</span> ' + msg;
+  t.innerHTML = '<span class="toast-ic">' + ic + '</span> ';
+  t.appendChild(document.createTextNode(msg));
   container.appendChild(t);
 
   setTimeout(() => t.classList.add('show'), 10);
@@ -1503,15 +1504,31 @@ async function loadCreditHistory() {
       const date = d.createdAt ? d.createdAt.toDate().toLocaleDateString() : 'Just now';
       const color = d.amount > 0 ? 'var(--accent)' : '#FF5566';
       const sign = d.amount > 0 ? '+' : '';
-      list.innerHTML += `
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="color:var(--text);font-weight:600;font-size:15px;margin-bottom:4px;">${d.reason}</div>
-            <div style="color:var(--text-muted);font-size:12px;">${date}</div>
-          </div>
-          <div style="color:${color};font-weight:700;font-size:16px;">${sign}${d.amount}</div>
-        </div>
-      `;
+
+      const itemEl = document.createElement('div');
+      itemEl.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px;display:flex;justify-content:space-between;align-items:center;';
+
+      const infoDiv = document.createElement('div');
+
+      const reasonDiv = document.createElement('div');
+      reasonDiv.style.cssText = 'color:var(--text);font-weight:600;font-size:15px;margin-bottom:4px;';
+      reasonDiv.textContent = d.reason;
+
+      const dateDiv = document.createElement('div');
+      dateDiv.style.cssText = 'color:var(--text-muted);font-size:12px;';
+      dateDiv.textContent = date;
+
+      infoDiv.appendChild(reasonDiv);
+      infoDiv.appendChild(dateDiv);
+
+      const amountDiv = document.createElement('div');
+      amountDiv.style.cssText = `color:${color};font-weight:700;font-size:16px;`;
+      amountDiv.textContent = `${sign}${d.amount}`;
+
+      itemEl.appendChild(infoDiv);
+      itemEl.appendChild(amountDiv);
+
+      list.appendChild(itemEl);
     });
   } catch(e) {
     console.error(e);
@@ -1543,12 +1560,28 @@ async function loadHistory() {
 
       const imgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(d.data) + '&color=' + d.fg.replace('#','') + '&bgcolor=' + d.bg.replace('#','') + '&ecc=' + d.ecc;
 
-      el.innerHTML = `
-        <img src="${imgUrl}" onclick="loadFromHistory('${doc.id}')">
-        <div class="qr-item-type">${d.type}</div>
-        <div class="qr-item-date">${dateStr}</div>
-        <button onclick="deleteHist('${doc.id}', event)" style="background:none;border:none;color:#FF5566;font-size:12px;cursor:pointer;margin-top:4px;">Delete</button>
-      `;
+      const imgEl = document.createElement('img');
+      imgEl.src = imgUrl;
+      imgEl.onclick = () => loadFromHistory(doc.id);
+
+      const typeDiv = document.createElement('div');
+      typeDiv.className = 'qr-item-type';
+      typeDiv.textContent = d.type;
+
+      const dateDiv = document.createElement('div');
+      dateDiv.className = 'qr-item-date';
+      dateDiv.textContent = dateStr;
+
+      const delBtn = document.createElement('button');
+      delBtn.style.cssText = 'background:none;border:none;color:#FF5566;font-size:12px;cursor:pointer;margin-top:4px;';
+      delBtn.textContent = 'Delete';
+      delBtn.onclick = (event) => deleteHist(doc.id, event);
+
+      el.appendChild(imgEl);
+      el.appendChild(typeDiv);
+      el.appendChild(dateDiv);
+      el.appendChild(delBtn);
+
       hGrid.appendChild(el);
     });
   } catch(e) {
@@ -2081,7 +2114,8 @@ function tick() {
         // Success
         video.style.display = 'none';
         resEl.style.display = 'block';
-        resEl.innerHTML = '<strong>✓ Scanned successfully:</strong><br>' + code.data;
+        resEl.innerHTML = '<strong>✓ Scanned successfully:</strong><br>';
+        resEl.appendChild(document.createTextNode(code.data));
         stopScan(); // Stop camera but leave modal open with result
         return;
       }
