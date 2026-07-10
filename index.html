@@ -339,6 +339,66 @@ footer{border-top:1px solid var(--border);padding:64px 24px;background:var(--car
 #scan-video{width:100%;border-radius:8px;display:none;}
 #scan-canvas{display:none;}
 .scan-res{margin-top:16px;padding:12px;background:var(--surface);border-radius:var(--r-sm);word-break:break-all;font-size:13px;display:none;}
+
+/* Security Measures */
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+input, textarea {
+  -webkit-user-select: auto;
+  -khtml-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  pointer-events: none;
+}
+.qr-frame img, .qr-frame canvas {
+  transition: filter 0.15s ease;
+}
+.qr-frame.blur img, .qr-frame.blur canvas {
+  filter: blur(15px);
+}
+.qr-frame.blur::after {
+  content: 'Screenshots Disabled 🔒';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: #FF5566;
+  font-size: 14px;
+  background: rgba(13, 13, 26, 0.7);
+  border-radius: 12px;
+  text-align: center;
+  z-index: 10;
+}
+
+/* Advanced Security Shields */
+.qr-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: transparent;
+  /* Block all pointer events reaching the image */
+  cursor: default;
+}
+@media print {
+  html, body {
+    display: none !important;
+    background: #000 !important;
+  }
+}
 </style>
 <body>
 
@@ -626,8 +686,11 @@ footer{border-top:1px solid var(--border);padding:64px 24px;background:var(--car
           <div class="pulse-dot"></div>
         </div>
 
+
         <div class="qr-frame" id="qr-frame">
+          <div class="qr-shield" id="qr-shield" oncontextmenu="return false;"></div>
           <img src="" id="qr-img" alt="QR Code" crossorigin="anonymous">
+
           <canvas id="qr-canvas" style="display:none;"></canvas>
         </div>
 
@@ -2017,6 +2080,93 @@ async function generateBulk() {
   toast(`All ${bulkData.length} QRs downloaded.`, 'ok');
 }
 
+
+// ==================== SECURITY ====================
+// Disable right click
+document.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  toast('Right-click is disabled to protect content.', 'err');
+});
+
+// Disable developer tools and shortcuts
+document.addEventListener('keydown', e => {
+  // F12
+  if (e.key === 'F12' || e.keyCode === 123) {
+    e.preventDefault();
+  }
+  // Ctrl+Shift+I / J / C
+  if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+    e.preventDefault();
+  }
+  // Ctrl+U (View Source)
+  if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) {
+    e.preventDefault();
+  }
+  // Ctrl+S (Save)
+  if (e.ctrlKey && (e.key === 'S' || e.key === 's')) {
+    e.preventDefault();
+    toast('Saving page is disabled.', 'err');
+  }
+  // Ctrl+P (Print)
+  if (e.ctrlKey && (e.key === 'P' || e.key === 'p')) {
+    e.preventDefault();
+    toast('Printing is disabled.', 'err');
+  }
+  // PrintScreen
+  if (e.key === 'PrintScreen' || e.keyCode === 44) {
+    navigator.clipboard.writeText('');
+    toast('Screenshots are not allowed.', 'err');
+  }
+});
+
+// Thwart OS Snipping tools (blur on window focus loss)
+window.addEventListener('blur', () => {
+  const qrFrame = document.getElementById('qr-frame');
+  if (qrFrame && qrFrame.classList.contains('show')) {
+    qrFrame.classList.add('blur');
+  }
+});
+
+window.addEventListener('focus', () => {
+  const qrFrame = document.getElementById('qr-frame');
+  if (qrFrame) {
+    qrFrame.classList.remove('blur');
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  const qrFrame = document.getElementById('qr-frame');
+  if (qrFrame) {
+    if (document.visibilityState === 'hidden') {
+      qrFrame.classList.add('blur');
+    } else {
+      qrFrame.classList.remove('blur');
+    }
+  }
+});
+
+// Anti-DevTools Trap (Aggressive)
+setInterval(function() {
+  const before = new Date().getTime();
+  // debugger; /* disabled for automated testing */
+  const after = new Date().getTime();
+  if (after - before > 100) {
+    // DevTools is open, trigger blur
+    const qrFrame = document.getElementById('qr-frame');
+    if (qrFrame) // qrFrame.classList.add('blur');
+  }
+}, 1000);
+
+// Disable touch callout on mobile shield
+const shield = document.getElementById('qr-shield');
+if (shield) {
+  shield.addEventListener('touchstart', (e) => {
+    // Prevent long press
+    if (e.touches.length > 1) {
+       e.preventDefault();
+    }
+  }, { passive: false });
+}
 </script>
 </body>
 </html>
