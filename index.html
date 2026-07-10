@@ -143,7 +143,7 @@ nav.scrolled{height:52px;}
 .gen-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow);}
 .type-tabs{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);padding:0 8px;}
 .type-tabs::-webkit-scrollbar{display:none;}
-.tab{display:flex;align-items:center;gap:8px;padding:16px;font-family:var(--font-b);font-size:14px;font-weight:600;color:var(--text-muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-1px;}
+.tab{display:flex;align-items:center;gap:8px;padding:16px;font-family:var(--font-d);font-size:14px;font-weight:700;color:var(--text-muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-1px;}
 .tab:hover{color:var(--text);}
 .tab.active{color:var(--primary);border-bottom-color:var(--primary);}
 
@@ -206,8 +206,8 @@ textarea.inp{resize:vertical;min-height:100px;}
 .qr-empty{display:flex;flex-direction:column;align-items:center;gap:16px;color:var(--text-dim);font-size:15px;text-align:center;}
 .skeleton{position:absolute;inset:24px;background:var(--surface);border-radius:12px;display:none;align-items:center;justify-content:center;}
 .skeleton.show{display:flex;}
-.pulse-dot{width:40px;height:40px;border-radius:50%;background:var(--primary);animation:pulse 1.5s infinite;}
-@keyframes pulse{0%{transform:scale(.8);opacity:.5;}100%{transform:scale(1.5);opacity:0;}}
+.pulse-dot{width:40px;height:40px;border-radius:50%;border:3px solid var(--primary-dim);border-top-color:var(--primary);animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 .qr-frame{background:#fff;border-radius:12px;padding:12px;box-shadow:0 8px 32px rgba(0,0,0,.4);display:none;position:relative;}
 .qr-frame.show{display:block;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275);}
 .qr-frame img, .qr-frame canvas{display:block;border-radius:4px;width:100%;max-width:240px;height:auto;}
@@ -226,6 +226,9 @@ textarea.inp{resize:vertical;min-height:100px;}
 .btn-share:hover{color:var(--text);border-color:var(--text-muted);}
 
 .sec{max-width:1180px;margin:96px auto;padding:0 24px;}
+.sec-hidden { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.sec.visible { opacity: 1; transform: translateY(0); }
+
 .sec-eye{font-size:13px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;}
 .sec-h{font-family:var(--font-d);font-size:clamp(28px,5vw,42px);font-weight:800;letter-spacing:-0.02em;margin-bottom:16px;}
 .sec-sub{color:var(--text-muted);font-size:18px;max-width:600px;margin-bottom:48px;}
@@ -277,7 +280,7 @@ textarea.inp{resize:vertical;min-height:100px;}
 
 .faq-list{display:flex;flex-direction:column;gap:12px;}
 .faq-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;}
-.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:none;border:none;color:var(--text);font-family:var(--font-b);font-size:16px;font-weight:600;text-align:left;cursor:pointer;}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:none;border:none;color:var(--text);font-family:var(--font-d);font-size:16px;font-weight:700;text-align:left;cursor:pointer;}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
 .faq-a-in{padding:0 24px 24px;color:var(--text-muted);font-size:15px;line-height:1.7;}
 .faq-item.open .faq-a{max-height:300px;}
@@ -1161,7 +1164,8 @@ window.onload = () => {
   if (type) document.querySelector('.tab[data-tab="' + type + '"]')?.click();
 
   // Initial render
-  queueRender();
+  // Instead of an immediate API call, just show empty state
+  document.getElementById('qr-empty').style.display = 'flex';
 
   // Live counter
   setInterval(() => {
@@ -1679,10 +1683,11 @@ function clearLogo() {
 
 // ==================== GENERATOR ====================
 let debounceTimer;
+let lastRenderedUrl = '';
 function queueRender() {
   clearTimeout(debounceTimer);
   document.getElementById('qr-skel').classList.add('show');
-  debounceTimer = setTimeout(generate, 600);
+  debounceTimer = setTimeout(generate, 800);
 }
 
 function gatherData() {
@@ -1751,6 +1756,13 @@ function generate() {
 
   // Base preview size is always 300
   const url = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(str) + '&color=' + fg + '&bgcolor=' + bg + '&ecc=' + ecc + '&qzone=' + qz;
+
+  // Prevent redundant network requests if nothing changed
+  if (url === lastRenderedUrl && !logoFile) {
+    document.getElementById('qr-skel').classList.remove('show');
+    return;
+  }
+  lastRenderedUrl = url;
 
   const img = document.getElementById('qr-img');
   const canvas = document.getElementById('qr-canvas');
@@ -1978,7 +1990,7 @@ async function shareQR() {
 }
 
 // ==================== RAZORPAY ====================
-function buyPack(packId, packCredits, amountPaise) {
+async function buyPack(packId, packCredits, amountPaise) {
   if (!user) {
     toast('Please sign in to purchase credits.', 'err');
     signIn();
@@ -1990,10 +2002,22 @@ function buyPack(packId, packCredits, amountPaise) {
     return;
   }
 
+  toast('Initializing secure checkout...', 'ok');
+  let orderId = '';
+  try {
+    const createOrderFn = firebase.functions().httpsCallable('createCreditOrder');
+    const result = await createOrderFn({ packId });
+    orderId = result.data.orderId;
+  } catch (error) {
+    toast('Checkout initialization failed.', 'err');
+    return;
+  }
+
   const options = {
     key: RAZORPAY_KEY,
     amount: amountPaise,
     currency: "USD",
+    order_id: orderId,
     name: "ScanZap",
     description: packCredits + " Credits - " + packId + " pack",
     image: "https://scanzap.in/scanzap-logo.png",
