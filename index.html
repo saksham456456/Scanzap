@@ -10,8 +10,8 @@
 <meta name="keywords" content="free qr code generator, qr code maker online, create qr code, qr code generator free, wifi qr code, url qr code, qr code download png">
 <meta name="robots" content="index, follow">
 <meta name="author" content="ScanZap">
-<meta name="geo.region" content="IN">
-<meta name="geo.placename" content="India">
+<link rel="alternate" hreflang="en" href="https://scanzap.in/" />
+<link rel="alternate" hreflang="x-default" href="https://scanzap.in/" />
 <link rel="canonical" href="https://scanzap.in/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://scanzap.in/">
@@ -50,11 +50,11 @@
   "description":"Free online QR code generator for URLs, text, email, phone, WiFi, and vCard contacts.",
   "applicationCategory":"UtilitiesApplication",
   "operatingSystem":"Web",
-  "offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
 }
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"how to create qr code for whatsapp","acceptedAnswer":{"@type":"Answer","text":"Use our URL tab and enter your WhatsApp link."}},{"@type":"Question","name":"qr code for google form","acceptedAnswer":{"@type":"Answer","text":"Copy your Google Form link and paste it in the URL tab to generate instantly."}},{"@type":"Question","name":"how to make wifi qr code for home","acceptedAnswer":{"@type":"Answer","text":"Select the WiFi tab, enter your network name (SSID) and password, and generate."}},{"@type":"Question","name":"qr code generator without watermark india","acceptedAnswer":{"@type":"Answer","text":"Scanzap provides high quality QR codes completely free of watermarks."}},{"@type":"Question","name":"free svg qr code download","acceptedAnswer":{"@type":"Answer","text":"You can download vector SVG formats by using credits."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"how to create qr code for whatsapp","acceptedAnswer":{"@type":"Answer","text":"Use our URL tab and enter your WhatsApp link."}},{"@type":"Question","name":"qr code for google form","acceptedAnswer":{"@type":"Answer","text":"Copy your Google Form link and paste it in the URL tab to generate instantly."}},{"@type":"Question","name":"how to make wifi qr code for home","acceptedAnswer":{"@type":"Answer","text":"Select the WiFi tab, enter your network name (SSID) and password, and generate."}},{"@type":"Question","name":"qr code generator without watermark","acceptedAnswer":{"@type":"Answer","text":"Scanzap provides high quality QR codes completely free of watermarks."}},{"@type":"Question","name":"free svg qr code download","acceptedAnswer":{"@type":"Answer","text":"You can download vector SVG formats by using credits."}}]}
 </script>
 
 <!-- ════ Firebase v9 Compat ════ -->
@@ -361,7 +361,7 @@ img {
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 .qr-frame img, .qr-frame canvas {
   transition: filter 0.15s ease;
@@ -725,9 +725,9 @@ img {
       <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=BEGIN:VCARD%0AVERSION:3.0%0A&size=100x100" alt="vCard QR"></div>
       <div class="tpl-info"><h4>Business Card</h4><p>vCard contact info</p></div>
     </div>
-    <div class="tpl-card" onclick="applyTemplate('upi')">
-      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=upi://pay?pa=name@upi&pn=Name&size=100x100" alt="UPI QR"></div>
-      <div class="tpl-info"><h4>UPI Payment</h4><p>Pre-filled UPI link</p></div>
+    <div class="tpl-card" onclick="applyTemplate('paypal')">
+      <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://paypal.me/username&size=100x100" alt="PayPal QR"></div>
+      <div class="tpl-info"><h4>PayPal Payment</h4><p>Pre-filled PayPal link</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('insta')">
       <div class="tpl-thumb"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://instagram.com/&size=100x100" alt="Insta QR"></div>
@@ -778,32 +778,32 @@ img {
     <div class="pack-card">
       <div class="pack-name">Starter</div>
       <div class="pack-credits">25 <sub>credits</sub></div>
-      <div class="pack-price">₹49</div>
-      <div class="pack-per">₹1.96 per credit</div>
-      <button class="btn-buy" onclick="buyPack('starter', 25, 4900)">Buy Starter</button>
+      <div class="pack-price">$9.99</div>
+      <div class="pack-per">$0.40 per credit</div>
+      <button class="btn-buy" onclick="buyPack('starter', 25, 999)">Buy Starter</button>
     </div>
     <div class="pack-card" style="border-color:var(--primary);">
       <div class="pack-badge">Most Popular</div>
       <div class="pack-name">Creator</div>
       <div class="pack-credits">80 <sub>credits</sub></div>
-      <div class="pack-price">₹129</div>
-      <div class="pack-per">₹1.61 per credit</div>
-      <button class="btn-buy" style="background:var(--primary);color:#fff;" onclick="buyPack('creator', 80, 12900)">Buy Creator</button>
+      <div class="pack-price">$24.99</div>
+      <div class="pack-per">$0.31 per credit</div>
+      <button class="btn-buy" onclick="buyPack('creator', 80, 2499)">Buy Creator</button>
     </div>
     <div class="pack-card">
       <div class="pack-name">Studio</div>
       <div class="pack-credits">200 <sub>credits</sub></div>
-      <div class="pack-price">₹249</div>
-      <div class="pack-per">₹1.24 per credit</div>
-      <button class="btn-buy" onclick="buyPack('studio', 200, 24900)">Buy Studio</button>
+      <div class="pack-price">$49.99</div>
+      <div class="pack-per">$0.25 per credit</div>
+      <button class="btn-buy" onclick="buyPack('studio', 200, 4999)">Buy Studio</button>
     </div>
     <div class="pack-card">
       <div class="pack-badge" style="background:var(--accent);color:#000;">Best Value</div>
       <div class="pack-name">Agency</div>
       <div class="pack-credits">600 <sub>credits</sub></div>
-      <div class="pack-price">₹599</div>
-      <div class="pack-per">₹0.99 per credit</div>
-      <button class="btn-buy" onclick="buyPack('agency', 600, 59900)">Buy Agency</button>
+      <div class="pack-price">$99.99</div>
+      <div class="pack-per">$0.16 per credit</div>
+      <button class="btn-buy" onclick="buyPack('agency', 600, 9999)">Buy Agency</button>
     </div>
   </div>
   <p style="text-align:center; color:var(--text-muted); font-size:14px; margin-bottom:32px;">Joined by 180,000+ creators and businesses. Credits never expire.</p>
@@ -868,20 +868,20 @@ img {
       <div class="stars">★★★★★</div>
       <p class="testi-q">"Generated 200 WiFi QR codes for all our hotel rooms in 20 minutes. The logo embedding made them look premium. Much better than paying a monthly sub!"</p>
       <div class="testi-u">
-        <div class="t-av">R</div>
+        <div class="t-av">M</div>
         <div>
-          <div class="t-name">Rahul S.</div>
+          <div class="t-name">Marcus T.</div>
           <div class="t-role">Hotel Manager</div>
         </div>
       </div>
     </div>
     <div class="testi">
       <div class="stars">★★★★★</div>
-      <p class="testi-q">"I love the pay-as-you-go credit system. I only need high-res SVG codes occasionally for print materials, so dropping ₹129 for a batch is a no-brainer."</p>
+      <p class="testi-q">"I love the pay-as-you-go credit system. I only need high-res SVG codes occasionally for print materials, so dropping $12.99 for a batch is a no-brainer."</p>
       <div class="testi-u">
-        <div class="t-av">A</div>
+        <div class="t-av">S</div>
         <div>
-          <div class="t-name">Priya A.</div>
+          <div class="t-name">Sarah J.</div>
           <div class="t-role">Graphic Designer</div>
         </div>
       </div>
@@ -890,9 +890,9 @@ img {
       <div class="stars">★★★★★</div>
       <p class="testi-q">"The vCard generator is perfect. I printed my QR code on my business cards. The live preview makes it foolproof."</p>
       <div class="testi-u">
-        <div class="t-av">K</div>
+        <div class="t-av">D</div>
         <div>
-          <div class="t-name">Karan T.</div>
+          <div class="t-name">David L.</div>
           <div class="t-role">Sales Executive</div>
         </div>
       </div>
@@ -994,6 +994,7 @@ img {
       <div class="dash-side">
         <button class="d-tab active" data-dtab="overview">Overview</button>
         <button class="d-tab" data-dtab="history">My QR Codes</button>
+        <button class="d-tab" data-dtab="credits">Credit History</button>
         <button class="d-tab" data-dtab="refer">Referrals</button>
         <button class="d-tab" data-dtab="settings">Settings</button>
       </div>
@@ -1005,6 +1006,7 @@ img {
             <div class="d-stat"><h5>Lifetime QRs</h5><div id="d-qrs">0</div></div>
             <div class="d-stat"><h5>Current Streak</h5><div id="d-str">0 🔥</div></div>
           </div>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:16px;">* Daily bonus credits expire in 24 hours.</p>
         </div>
 
         <div id="dp-history" class="d-panel">
@@ -1013,6 +1015,17 @@ img {
           <div class="qr-grid" id="history-grid">
             <!-- Populated by JS -->
             <div style="grid-column:1/-1; color:var(--text-dim); text-align:center; padding:32px;">No QR codes yet. Generate your first one!</div>
+          </div>
+        </div>
+
+        <div id="dp-credits" class="d-panel">
+          <h3 class="modal-h">Credit History</h3>
+          <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+            <p style="color:var(--text-muted);font-size:14px;">Your recent credit activity.</p>
+          </div>
+          <div id="dash-credit-list" style="display:flex;flex-direction:column;gap:12px;">
+            <!-- Populated by JS -->
+            <div style="color:var(--text-dim); text-align:center; padding:32px;">No credit history yet.</div>
           </div>
         </div>
 
@@ -1245,6 +1258,7 @@ async function syncUser() {
       updates.credits = (userDoc.credits || 0) + localC;
       updates.creditsEarned = (userDoc.creditsEarned || 0) + localC;
       localStorage.removeItem('scanzap_credits');
+      logCreditHistory(localC, 'Guest credits merged');
     }
 
     // Daily Streak Logic
@@ -1259,11 +1273,14 @@ async function syncUser() {
         updates.dailyStreak = 1;
       }
       updates.lastLoginDate = today;
-      updates.credits = (updates.credits !== undefined ? updates.credits : userDoc.credits) + 2;
+
+      // Daily Credits expire in 24 hrs, meaning we just reset dailyCredits to 2 upon first login of the day
+      updates.dailyCredits = 2;
       updates.creditsEarned = (updates.creditsEarned !== undefined ? updates.creditsEarned : userDoc.creditsEarned) + 2;
 
       setTimeout(() => {
-        toast('🔥 Day ' + updates.dailyStreak + ' streak! +2 credits', 'credit');
+        toast('🔥 Day ' + updates.dailyStreak + ' streak! +2 daily credits', 'credit');
+        logCreditHistory(2, 'Daily login bonus');
       }, 1500);
     }
 
@@ -1273,30 +1290,40 @@ async function syncUser() {
     }
   }
 
-  credits = userDoc.credits;
+  credits = (userDoc.credits || 0) + (userDoc.dailyCredits || 0);
   updateCreditUI();
 
   // Listen for real-time updates to credits
   userRef.onSnapshot(snap => {
     if(snap.exists) {
       const newData = snap.data();
-      if(newData.credits > credits) {
+      const totalCredits = (newData.credits || 0) + (newData.dailyCredits || 0);
+      if(totalCredits > credits) {
         // Gained
         const badge = document.getElementById('credit-display');
         badge.classList.remove('credit-anim');
         void badge.offsetWidth; // trigger reflow
         badge.classList.add('credit-anim');
-      } else if (newData.credits < credits) {
+      } else if (totalCredits < credits) {
         // Spent
         const badge = document.getElementById('credit-display');
         badge.classList.remove('credit-anim-down');
         void badge.offsetWidth;
         badge.classList.add('credit-anim-down');
       }
-      credits = newData.credits;
+      credits = totalCredits;
       userDoc = newData;
       updateCreditUI();
     }
+  });
+}
+
+function logCreditHistory(amount, reason) {
+  if (!db || !user) return;
+  db.collection('users').doc(user.uid).collection('creditHistory').add({
+    amount: amount,
+    reason: reason,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
   });
 }
 
@@ -1320,8 +1347,22 @@ async function spendCredits(amount) {
 
   if (user && db) {
     const userRef = db.collection('users').doc(user.uid);
+    // Deduct from dailyCredits first
+    let dailyC = userDoc.dailyCredits || 0;
+    let permC = userDoc.credits || 0;
+    let dailyDeduct = 0;
+    let permDeduct = 0;
+
+    if (dailyC >= amount) {
+      dailyDeduct = amount;
+    } else {
+      dailyDeduct = dailyC;
+      permDeduct = amount - dailyC;
+    }
+
     await userRef.update({
-      credits: firebase.firestore.FieldValue.increment(-amount),
+      dailyCredits: firebase.firestore.FieldValue.increment(-dailyDeduct),
+      credits: firebase.firestore.FieldValue.increment(-permDeduct),
       creditsSpent: firebase.firestore.FieldValue.increment(amount)
     });
     // The snapshot listener will update the local `credits` var
@@ -1435,14 +1476,47 @@ document.querySelectorAll('.d-tab').forEach(t => {
 
 function openDashboard() {
   if(!user || !userDoc) return signIn();
-  document.getElementById('d-bal').textContent = userDoc.credits || 0;
+  document.getElementById('d-bal').textContent = (userDoc.credits || 0) + (userDoc.dailyCredits || 0);
   document.getElementById('d-qrs').textContent = (userDoc.creditsEarned - (userDoc.credits || 0)) / 2 || 0; // rough estimate if no array length, or load from subcol
   document.getElementById('d-str').textContent = (userDoc.dailyStreak || 0) + ' 🔥';
   document.getElementById('my-ref-code').textContent = userDoc.referralCode || '------';
   document.getElementById('set-name').value = userDoc.displayName || '';
 
   loadHistory();
+  loadCreditHistory();
   document.getElementById('dash-modal').classList.add('show');
+}
+
+async function loadCreditHistory() {
+  if(!user || !db) return;
+  const list = document.getElementById('dash-credit-list');
+  list.innerHTML = 'Loading...';
+  try {
+    const snaps = await db.collection('users').doc(user.uid).collection('creditHistory').orderBy('createdAt', 'desc').limit(20).get();
+    if(snaps.empty) {
+      list.innerHTML = '<div style="color:var(--text-dim); text-align:center; padding:32px;">No credit history yet.</div>';
+      return;
+    }
+    list.innerHTML = '';
+    snaps.forEach(doc => {
+      const d = doc.data();
+      const date = d.createdAt ? d.createdAt.toDate().toLocaleDateString() : 'Just now';
+      const color = d.amount > 0 ? 'var(--accent)' : '#FF5566';
+      const sign = d.amount > 0 ? '+' : '';
+      list.innerHTML += `
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="color:var(--text);font-weight:600;font-size:15px;margin-bottom:4px;">${d.reason}</div>
+            <div style="color:var(--text-muted);font-size:12px;">${date}</div>
+          </div>
+          <div style="color:${color};font-weight:700;font-size:16px;">${sign}${d.amount}</div>
+        </div>
+      `;
+    });
+  } catch(e) {
+    console.error(e);
+    list.innerHTML = 'Failed to load history.';
+  }
 }
 
 async function loadHistory() {
@@ -1855,9 +1929,9 @@ function applyTemplate(t) {
     updHex('c-fg','h-fg');
   } else if (t === 'bizcard') {
     document.querySelector('.tab[data-tab="vcard"]').click();
-  } else if (t === 'upi') {
+  } else if (t === 'paypal') {
     document.querySelector('.tab[data-tab="url"]').click();
-    document.getElementById('in-url').value = 'upi://pay?pa=name@upi&pn=Name';
+    document.getElementById('in-url').value = 'https://paypal.me/username';
   } else if (t === 'insta') {
     document.querySelector('.tab[data-tab="url"]').click();
     document.getElementById('in-url').value = 'https://instagram.com/';
@@ -1919,7 +1993,7 @@ function buyPack(packId, packCredits, amountPaise) {
   const options = {
     key: RAZORPAY_KEY,
     amount: amountPaise,
-    currency: "INR",
+    currency: "USD",
     name: "ScanZap",
     description: packCredits + " Credits - " + packId + " pack",
     image: "https://scanzap.in/scanzap-logo.png",
@@ -1933,11 +2007,11 @@ function buyPack(packId, packCredits, amountPaise) {
         await verifyFn({
           packId: packId,
           razorpay_payment_id: pId,
-          razorpay_order_id: 'test_order_id_frontend',
-          razorpay_signature: 'test_sig',
-          bypassTest: true // Since we are integrating for testing without real keys
+          razorpay_order_id: response.razorpay_order_id || 'test_order_id_frontend',
+          razorpay_signature: response.razorpay_signature || 'test_sig'
         });
         toast('🎉 Payment successful! Added ' + packCredits + ' credits.', 'credit');
+        logCreditHistory(packCredits, `Purchased ${packId} pack`);
       } catch(e) {
         toast('Backend Verification Failed: ' + e.message, 'err');
       }
@@ -2145,17 +2219,7 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// Anti-DevTools Trap (Aggressive)
-setInterval(function() {
-  const before = new Date().getTime();
-  // debugger; /* disabled for automated testing */
-  const after = new Date().getTime();
-  if (after - before > 100) {
-    // DevTools is open, trigger blur
-    const qrFrame = document.getElementById('qr-frame');
-    if (qrFrame) // qrFrame.classList.add('blur');
-  }
-}, 1000);
+// Anti-DevTools Trap (Aggressive) removed to prevent browser freezing
 
 // Disable touch callout on mobile shield
 const shield = document.getElementById('qr-shield');
