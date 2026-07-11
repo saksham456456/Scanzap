@@ -2105,7 +2105,8 @@ function tick() {
         // Success
         video.style.display = 'none';
         resEl.style.display = 'block';
-        resEl.innerHTML = '<strong>✓ Scanned successfully:</strong><br>' + code.data;
+        resEl.innerHTML = '<strong>✓ Scanned successfully:</strong><br>';
+        resEl.appendChild(document.createTextNode(code.data));
         stopScan(); // Stop camera but leave modal open with result
         return;
       }
