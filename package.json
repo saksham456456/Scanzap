@@ -1,0 +1,12 @@
+{
+  "name": "scanzap",
+  "version": "3.0.0",
+  "description": "Scanzap QR Code Generator",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
