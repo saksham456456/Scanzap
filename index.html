@@ -71,7 +71,7 @@
 </script>
 
 <!-- Security Headers -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://js.stripe.com https://api.qrserver.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://api.qrserver.com https://www.google.com; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://api.stripe.com https://api.qrserver.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://js.stripe.com https://api.qrserver.com https://fonts.googleapis.com https://fonts.gstatic.com https://qr-generator-9c3b8.firebaseapp.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://js.stripe.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://api.qrserver.com https://www.google.com https://lh3.googleusercontent.com; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://api.stripe.com https://api.qrserver.com; frame-src 'self' https://qr-generator-9c3b8.firebaseapp.com https://js.stripe.com;">
 <meta http-equiv="X-Frame-Options" content="DENY">
 
 <!-- Firebase v9 Compat -->
@@ -545,12 +545,13 @@ footer { border-top: 1px solid var(--border); padding: 80px 24px 40px; backgroun
 // STEP 1: Replace with your Firebase config
 // ═══════════════════════════════════════════
 const FIREBASE_CONFIG = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT.firebaseapp.com",
-  projectId:         "YOUR_PROJECT",
-  storageBucket:     "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  apiKey: "AIzaSyBxOJUeXn-Y2J8Ip-sRJA8Bbrlzv5AsWf0",
+  authDomain: "qr-generator-9c3b8.firebaseapp.com",
+  projectId: "qr-generator-9c3b8",
+  storageBucket: "qr-generator-9c3b8.firebasestorage.app",
+  messagingSenderId: "500198931185",
+  appId: "1:500198931185:web:8962f5d48cfedc83cc0750",
+  measurementId: "G-4PS6V6J8L3"
 };
 
 // ═══════════════════════════════════════════
