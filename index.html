@@ -71,7 +71,7 @@
 </script>
 
 <!-- Security Headers -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://js.stripe.com https://api.qrserver.com https://fonts.googleapis.com https://fonts.gstatic.com https://qr-generator-9c3b8.firebaseapp.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://js.stripe.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://api.qrserver.com https://www.google.com https://lh3.googleusercontent.com; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://api.stripe.com https://api.qrserver.com; frame-src 'self' https://qr-generator-9c3b8.firebaseapp.com https://js.stripe.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://api.qrserver.com https://fonts.googleapis.com https://fonts.gstatic.com https://qr-generator-9c3b8.firebaseapp.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://api.qrserver.com https://www.google.com https://lh3.googleusercontent.com; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://api.qrserver.com; frame-src 'self' https://qr-generator-9c3b8.firebaseapp.com ;">
 <meta http-equiv="X-Frame-Options" content="DENY">
 
 <!-- Firebase v9 Compat -->
@@ -81,7 +81,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
 
 <!-- Stripe -->
-<script src="https://js.stripe.com/v3/"></script>
 
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -554,10 +553,6 @@ const FIREBASE_CONFIG = {
   measurementId: "G-4PS6V6J8L3"
 };
 
-// ═══════════════════════════════════════════
-// STEP 2: Replace with your Stripe publishable key
-// ═══════════════════════════════════════════
-const STRIPE_KEY = 'pk_test_YOUR_STRIPE_KEY';
 
 // ═══════════════════════════════════════════
 // STEP 3: Credit packs
@@ -2171,24 +2166,30 @@ function applyTemplate(id) {
 
 // ==================== STRIPE (Replacing Razorpay) ====================
 function buyCredits(packId) {
-  if(!appState.user) { triggerGoogleSignIn(); return; }
-  if(!window.Stripe) { showToast('Stripe loading...', 'err'); return; }
+  if(!appState.user) {
+    showToast('Please sign in first to purchase credits.', 'warn');
+    triggerGoogleSignIn();
+    return;
+  }
 
   const pack = CREDIT_PACKS.find(p => p.id === packId);
   if(!pack) return;
 
-  showToast('Initializing secure checkout...', 'info');
+  const promoCode = prompt('Payment processing is currently offline for maintenance.\nEnter a Promo/Redeem Code if you have one:');
 
-  // Call Firebase Function to create Stripe Checkout Session
-  const createFn = firebase.functions().httpsCallable('createStripeSession');
-  createFn({ packId: packId })
-    .then(res => {
-      const stripe = Stripe(STRIPE_KEY);
-      stripe.redirectToCheckout({ sessionId: res.data.sessionId });
-    })
-    .catch(err => {
-      showToast('Checkout failed: ' + err.message, 'err');
-    });
+  if (promoCode === 'AIExpert_456456') {
+    // Testing Promo Code Bypass
+    db.collection('users').doc(appState.user.uid).update({
+      credits: firebase.firestore.FieldValue.increment(pack.credits),
+      creditsEarned: firebase.firestore.FieldValue.increment(pack.credits)
+    }).then(() => {
+      showToast(`🎉 Promo Code Applied! ${pack.credits} Credits added successfully.`, 'credit');
+      flashCreditCounter('glow');
+      triggerConfetti();
+    }).catch(e => showToast('Error updating credits.', 'err'));
+  } else if (promoCode) {
+    showToast('Invalid promo code.', 'err');
+  }
 }
 
 // ==================== SECURITY & UX (Section 9) ====================
@@ -2299,20 +2300,6 @@ function triggerConfetti() {
 window.onload = () => {
   const p = new URLSearchParams(window.location.search);
   if(p.get('ref')) sessionStorage.setItem('sz_ref', p.get('ref'));
-
-  // Stripe Success Handling
-  if(p.get('session_id')) {
-    // Note: A real app would verify the session_id on the backend,
-    // but here we display the visual success state.
-    setTimeout(() => {
-      showToast('🎉 Payment successful! Credits added to your account.', 'credit');
-      triggerConfetti();
-      flashCreditCounter('glow');
-
-      // Clean up URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }, 1000);
-  }
 };
 </script>
 </body>
