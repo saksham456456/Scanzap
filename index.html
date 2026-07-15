@@ -15,7 +15,8 @@
 <meta property="og:url" content="https://scanzap.com/">
 <meta property="og:title" content="Free QR Code Generator — Scanzap">
 <meta property="og:description" content="Generate QR codes for URLs, WiFi, contacts and more. No subscriptions. Pay only for advanced features.">
-<meta property="og:image" content="https://scanzap.com/og.png">
+<link rel="canonical" href="https://scanzap.vercel.app/" />
+<meta property="og:image" content="https://scanzap.vercel.app/scanzap-logo.png">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
@@ -71,7 +72,7 @@
 </script>
 
 <!-- Security Headers -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://api.qrserver.com https://fonts.googleapis.com https://fonts.gstatic.com https://qr-generator-9c3b8.firebaseapp.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://api.qrserver.com https://www.google.com https://lh3.googleusercontent.com; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://api.qrserver.com; frame-src 'self' https://qr-generator-9c3b8.firebaseapp.com ;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://api.qrserver.com https://fonts.googleapis.com https://fonts.gstatic.com https://qr-generator-9c3b8.firebaseapp.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://api.qrserver.com https://www.google.com https://lh3.googleusercontent.com https://t0.gstatic.com; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://api.qrserver.com; frame-src 'self' https://qr-generator-9c3b8.firebaseapp.com ;">
 <meta http-equiv="X-Frame-Options" content="DENY">
 
 <!-- Firebase v9 Compat -->
@@ -82,6 +83,8 @@
 
 <!-- Stripe -->
 
+<!-- JSZip -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -782,10 +785,18 @@ const CREDIT_COSTS = {
           <label>Phone Number</label>
           <div style="display:flex; gap:8px;">
             <select id="in-phone-code" style="background:var(--bg); border:1px solid var(--border); color:var(--text); padding:12px; border-radius:var(--r-sm); outline:none;" onchange="document.getElementById('in-phone').placeholder = this.options[this.selectedIndex].dataset.ph; debounceGenerate()">
-              <option value="+1" data-ph="+1 555 000 0000">🇺🇸 +1</option>
-              <option value="+44" data-ph="+44 7700 900077">🇬🇧 +44</option>
-              <option value="+61" data-ph="+61 400 000 000">🇦🇺 +61</option>
-              <option value="+91" data-ph="+91 98765 43210">🇮🇳 +91</option>
+              <option value="+1" data-ph="202 555 0123">🇺🇸/🇨🇦 +1</option>
+          <option value="+44" data-ph="7700 900077">🇬🇧 +44</option>
+          <option value="+61" data-ph="4 1234 5678">🇦🇺 +61</option>
+          <option value="+91" data-ph="98765 43210">🇮🇳 +91</option>
+          <option value="+49" data-ph="151 23456789">🇩🇪 +49</option>
+          <option value="+33" data-ph="6 12 34 56 78">🇫🇷 +33</option>
+          <option value="+81" data-ph="90 1234 5678">🇯🇵 +81</option>
+          <option value="+55" data-ph="11 91234 5678">🇧🇷 +55</option>
+          <option value="+52" data-ph="55 1234 5678">🇲🇽 +52</option>
+          <option value="+34" data-ph="612 34 56 78">🇪🇸 +34</option>
+          <option value="+39" data-ph="312 345 6789">🇮🇹 +39</option>
+          <option value="+27" data-ph="81 234 5678">🇿🇦 +27</option>
             </select>
             <input type="tel" id="in-phone" placeholder="+1 555 000 0000" oninput="debounceGenerate()" style="flex:1;">
           </div>
@@ -884,7 +895,7 @@ const CREDIT_COSTS = {
         <div class="grid-2" style="margin-bottom: 24px;">
           <div>
             <label style="display:block; font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:8px;">Dot Style</label>
-            <div class="swatch-group" id="dot-style-group">
+            <div class="swatch-group" id="dot-style-group" style="pointer-events:none; opacity:0.5;">
               <div class="swatch active" data-val="square" title="Square"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/></svg></div>
               <div class="swatch" data-val="rounded" title="Rounded"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/></svg></div>
               <div class="swatch" data-val="dots" title="Dots"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg></div>
@@ -892,7 +903,7 @@ const CREDIT_COSTS = {
           </div>
           <div>
             <label style="display:block; font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:8px;">Eye Shape</label>
-            <div class="swatch-group" id="eye-shape-group">
+            <div class="swatch-group" id="eye-shape-group" style="pointer-events:none; opacity:0.5;">
               <div class="swatch active" data-val="square" title="Square"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zm4 4v8h8V8z"/></svg></div>
               <div class="swatch" data-val="rounded" title="Rounded"><svg viewBox="0 0 24 24"><path d="M8 4h8a4 4 0 014 4v8a4 4 0 01-4 4H8a4 4 0 01-4-4V8a4 4 0 014-4zm0 4v8h8V8z"/></svg></div>
               <div class="swatch" data-val="circle" title="Circle"><svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 110 16 8 8 0 010-16zm0 4a4 4 0 100 8 4 4 0 000-8z"/></svg></div>
@@ -961,7 +972,7 @@ const CREDIT_COSTS = {
       <canvas id="qr-canvas"></canvas>
     </div>
 
-    <div class="qr-meta" id="qr-meta" style="display:none;">300×300px · M error correction</div>
+    <div class="qr-meta" id="qr-meta" style="display:none;"></div>
 
     <div class="qr-actions" id="qr-actions" style="display:none; position:relative; z-index:10;">
       <button class="btn btn-accent qr-action-overlay" style="padding:16px; font-size:16px; display:flex; justify-content:center; gap:8px;" onclick="downloadPNG()">⬇ Download PNG</button>
@@ -975,7 +986,7 @@ const CREDIT_COSTS = {
     <!-- Sign up nudge for guests -->
     <div id="guest-signup-nudge" style="display:none; background:var(--primary-dim); border:1px solid var(--primary); padding:12px; border-radius:var(--r-sm); margin-top:24px; font-size:13px; text-align:left; position:relative;">
       <button style="position:absolute; top:8px; right:8px; background:none; border:none; color:var(--text); cursor:pointer;" onclick="this.parentElement.style.display='none'">✕</button>
-      Sign up free to save this QR code and get 10 credits → <a href="#" style="color:var(--primary); font-weight:700; text-decoration:none;" onclick="triggerGoogleSignIn()">Create Account</a>
+      Sign up free to save this QR code and get 10 credits → <a href="javascript:void(0)" style="color:var(--primary); font-weight:700; text-decoration:none;" onclick="triggerGoogleSignIn()">Create Account</a>
     </div>
   </div>
 </section>
@@ -988,27 +999,27 @@ const CREDIT_COSTS = {
   </div>
   <div class="tpl-grid">
     <div class="tpl-card" onclick="applyTemplate('wifi')">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=WIFI:S:GuestNetwork;T:WPA;P:;;;" alt="WiFi Template">
+      <canvas class="tpl-canvas" data-str="WIFI:S:GuestNetwork;T:WPA;P:;;;" data-color="000000" width="150" height="150" style="max-width:100%; border-radius:8px; margin-bottom:16px;"></canvas>
       <div class="tpl-info"><h4>WiFi Access</h4><p>Pre-filled WiFi network</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('menu')">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://yourmenu.link&color=00D4AA" alt="Menu Template">
+      <canvas class="tpl-canvas" data-str="https://yourmenu.link" data-color="00D4AA" width="150" height="150" style="max-width:100%; border-radius:8px; margin-bottom:16px;"></canvas>
       <div class="tpl-info"><h4>Restaurant Menu</h4><p>Teal colored URL QR</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('vcard')">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=BEGIN:VCARD%0AVERSION:3.0%0AEND:VCARD" alt="vCard Template">
+      <canvas class="tpl-canvas" data-str="BEGIN:VCARD%0AVERSION:3.0%0AEND:VCARD" data-color="000000" width="150" height="150" style="max-width:100%; border-radius:8px; margin-bottom:16px;"></canvas>
       <div class="tpl-info"><h4>Business Card</h4><p>vCard format</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('whatsapp')">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/" alt="WhatsApp Template">
+      <canvas class="tpl-canvas" data-str="https://wa.me/" data-color="000000" width="150" height="150" style="max-width:100%; border-radius:8px; margin-bottom:16px;"></canvas>
       <div class="tpl-info"><h4>WhatsApp Chat</h4><p>Direct messaging link</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('youtube')">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://youtube.com/@" alt="YouTube Template">
+      <canvas class="tpl-canvas" data-str="https://youtube.com/@" data-color="000000" width="150" height="150" style="max-width:100%; border-radius:8px; margin-bottom:16px;"></canvas>
       <div class="tpl-info"><h4>YouTube Channel</h4><p>Channel link</p></div>
     </div>
     <div class="tpl-card" onclick="applyTemplate('calendly')">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://calendly.com/" alt="Calendly Template">
+      <canvas class="tpl-canvas" data-str="https://calendly.com/" data-color="000000" width="150" height="150" style="max-width:100%; border-radius:8px; margin-bottom:16px;"></canvas>
       <div class="tpl-info"><h4>Calendly Booking</h4><p>Booking link</p></div>
     </div>
   </div>
@@ -1152,7 +1163,7 @@ const CREDIT_COSTS = {
     </div>
   </div>
 
-  <p style="text-align:center; font-size:14px; color:var(--text-muted); margin-top:24px;">Credits never expire · Secure payment via Stripe · Cancel anytime</p>
+  <p style="text-align:center; font-size:14px; color:var(--text-muted); margin-top:24px;">Credits never expire · One-time purchase, no subscriptions.</p>
 
   <div class="grid-2" style="margin-top: 48px;">
     <div>
@@ -1450,7 +1461,7 @@ async function syncUserData() {
     if(Object.keys(updates).length > 0) {
       await ref.update(updates);
     }
-    appState.userData = { ...data, ...updates }; // local approx until snapshot fires
+    appState.userData = Object.assign({}, data, updates); // local approx until snapshot fires
   }
 
   localStorage.removeItem('sz_credits');
@@ -1507,6 +1518,11 @@ function renderNavAuth() {
   }
 }
 
+function recordHistory(uid, desc, amt) {
+  if(!db) return;
+  db.collection('users').doc(uid).collection('creditHistory').add({ description: desc, amount: amt, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+}
+
 function updateCreditUI() {
   const el = $('#nav-credit-num');
   if(el) {
@@ -1556,10 +1572,17 @@ async function deductCredits(cost) {
 
 // ==================== DASHBOARD ====================
 function openDashboard() {
-  if(!appState.user || !appState.userData) return;
-
-  $('#d-bal').innerText = appState.credits + appState.dailyCredits;
-  $('#d-streak').innerText = (appState.userData.dailyStreak || 1) + ' 🔥';
+  if(!appState.user) return;
+  if (appState.userData) {
+      $('#d-bal').innerText = (appState.userData.credits || 0) + (appState.userData.dailyCredits || 0);
+      $('#d-streak').innerText = (appState.userData.dailyStreak || 1) + ' 🔥';
+      $('#ref-link').innerText = 'https://scanzap.com/?ref=' + (appState.userData.referralCode || '');
+      $('#set-name').value = appState.userData.displayName || '';
+      $('#set-email').value = appState.userData.email || '';
+  } else {
+      $('#d-bal').innerText = appState.credits + appState.dailyCredits;
+      $('#d-streak').innerText = '1 🔥';
+  }
   $('#ref-link').innerText = 'https://scanzap.com/?ref=' + appState.userData.referralCode;
   $('#set-name').value = appState.userData.displayName || '';
   $('#set-email').value = appState.userData.email || '';
@@ -1745,10 +1768,8 @@ function handleLogoUpload(input) {
   if(file.size > 500000) { showToast('Logo must be under 500KB', 'err'); return; }
 
   appState.logoFile = file;
-  const reader = new FileReader();
-  reader.onload = e => {
-    appState.logoUrl = e.target.result;
-    $('#logo-img').src = appState.logoUrl;
+  appState.logoUrl = URL.createObjectURL(file);
+  $('#logo-img').src = appState.logoUrl;
     $('#logo-dropzone').style.display = 'none';
     $('#logo-preview-wrap').style.display = 'flex';
 
@@ -1757,8 +1778,6 @@ function handleLogoUpload(input) {
     $('[data-val="H"]').classList.add('active');
 
     debounceGenerate();
-  };
-  reader.readAsDataURL(file);
 }
 function removeLogo() {
   appState.logoFile = null;
@@ -1940,6 +1959,18 @@ function showQRUI() {
   $('#qr-meta').innerText = `${appState.qrSize}×${appState.qrSize}px · ${$('#ecc-group .active').dataset.val} error correction`;
   $('#qr-actions').style.display = 'grid';
 
+  if (appState.user && db) {
+      db.collection('users').doc(appState.user.uid).collection('qrcodes').add({
+          type: appState.activeTab,
+          data: getQRDataString(),
+          fg: $('#c-fg').value,
+          bg: $('#c-bg').value,
+          ecc: $('#ecc-group .active').dataset.val,
+          size: appState.qrSize,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(e => console.warn('Failed to save history'));
+  }
+
   // Nudge logic: shown once right after generation
   if(!appState.user && !sessionStorage.getItem('sz_nudge')) {
     $('#guest-signup-nudge').style.display = 'block';
@@ -2070,38 +2101,40 @@ async function generateBulk() {
 
   if(!await deductCredits(cost)) return;
 
-  showToast(`Generating ${appState.csvData.length} QRs. Please allow popups...`, 'info');
+  showToast(`Generating ${appState.csvData.length} QRs. Please wait...`, 'info');
 
   const fg = $('#c-fg').value.substring(1);
   const bg = $('#c-bg').value.substring(1);
+  const ecc = $('#ecc-group .active').dataset.val;
+  const qz = $('#c-qz').value;
 
-  // Create an HTML page containing all the QRs so the user can save them easily,
-  // bypassing the browser's aggressive multi-download popup block.
-  let html = `<html><head><title>Scanzap Bulk Export</title><style>
-    body { font-family: sans-serif; padding: 20px; background: #f5f5f5; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-    .card { background: white; padding: 16px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    img { max-width: 100%; height: auto; }
-    .data { font-size: 11px; color: #666; margin-top: 8px; word-break: break-all; }
-  </style></head><body>
-  <h2>Your Bulk QR Codes</h2>
-  <p>Right-click (or long-press) to save individual images, or print this page to PDF.</p>
-  <div class="grid">`;
+  try {
+    const zip = new JSZip();
+    const folder = zip.folder("Scanzap_Bulk_QRs");
 
-  appState.csvData.forEach((row, i) => {
-    const url = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(row)}&color=${fg}&bgcolor=${bg}`;
-    const safeData = escapeHTML(row.substring(0,40)) + (row.length>40?'...':'');
-    html += `<div class="card"><img src="${url}" alt="QR ${i+1}"><div class="data">${safeData}</div></div>`;
-  });
+    let processed = 0;
+    for(let i=0; i<appState.csvData.length; i++) {
+        let row = appState.csvData[i];
+        let url = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(row)}&color=${fg}&bgcolor=${bg}&ecc=${ecc}&qzone=${qz}`;
+        const res = await fetch(url);
+        const blob = await res.blob();
+        folder.file(`QR_${i+1}.png`, blob);
+        processed++;
+    }
 
-  html += `</div></body></html>`;
+    showToast('Zipping files...', 'info');
+    const zipBlob = await zip.generateAsync({type:"blob"});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(zipBlob);
+    a.download = 'Scanzap_Bulk.zip';
+    a.click();
+    URL.revokeObjectURL(a.href);
 
-  const blob = new Blob([html], { type: 'text/html' });
-  const objectUrl = URL.createObjectURL(blob);
-  window.open(objectUrl, '_blank');
-
-  logGenerationHistory(cost, true);
-  showToast('Bulk export ready in new tab!', 'ok');
+    showToast('ZIP downloaded successfully!', 'ok');
+  } catch(e) {
+    showToast('Bulk generation failed.', 'err');
+    console.error(e);
+  }
 }
 
 function logGenerationHistory(cost, isBulk = false) {
@@ -2153,8 +2186,8 @@ function applyTemplate(id) {
   if(id==='wifi') { target = 'panel-wifi'; $('#in-wifi-ssid').value = 'GuestNetwork'; }
   if(id==='menu') { target = 'panel-url'; $('#in-url').value = 'https://yourmenu.link'; $('#c-fg').value = '#00D4AA'; updateHex($('#c-fg'), 'hex-fg'); }
   if(id==='vcard') target = 'panel-vcard';
-  if(id==='whatsapp') { target = 'panel-url'; $('#in-url').value = 'https://wa.me/'; }
-  if(id==='youtube') { target = 'panel-url'; $('#in-url').value = 'https://youtube.com/@'; }
+  if(id==='whatsapp') { target = 'panel-url'; $('#in-url').value = ''; $('#in-url').placeholder = 'https://wa.me/1234567890'; }
+  if(id==='youtube') { target = 'panel-url'; $('#in-url').value = ''; $('#in-url').placeholder = 'https://youtube.com/@ChannelName'; }
   if(id==='calendly') { target = 'panel-url'; $('#in-url').value = 'https://calendly.com/'; }
 
   document.querySelector('.generator-section').scrollIntoView();
@@ -2186,6 +2219,7 @@ function buyCredits(packId) {
       showToast(`🎉 Promo Code Applied! ${pack.credits} Credits added successfully.`, 'credit');
       flashCreditCounter('glow');
       triggerConfetti();
+      recordHistory(appState.user.uid, `Promo: ${pack.name} Pack`, pack.credits);
     }).catch(e => showToast('Error updating credits.', 'err'));
   } else if (promoCode) {
     showToast('Invalid promo code.', 'err');
@@ -2297,7 +2331,27 @@ function triggerConfetti() {
 }
 
 // Initial setup
+setInterval(() => {
+  const el = document.getElementById('visitor-count');
+  if(el) {
+    let current = parseInt(el.innerText);
+    let change = Math.floor(Math.random() * 5) - 2;
+    current = Math.max(12, current + change);
+    el.innerText = current;
+  }
+}, 5000);
+
 window.onload = () => {
+  document.querySelectorAll('.tpl-canvas').forEach(canvas => {
+      const data = canvas.dataset.str;
+      const color = canvas.dataset.color;
+      const url = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${data}&color=${color}`;
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.onload = () => ctx.drawImage(img, 0, 0);
+      img.src = url;
+  });
   const p = new URLSearchParams(window.location.search);
   if(p.get('ref')) sessionStorage.setItem('sz_ref', p.get('ref'));
 };
