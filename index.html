@@ -2225,8 +2225,14 @@ function buyCredits(packId) {
       flashCreditCounter('glow');
       triggerConfetti();
       appState.credits += pack.credits;
-      updateCreditUI();
+      if (appState.userData) {
+         if (!appState.userData.credits) appState.userData.credits = 0;
+         appState.userData.credits += pack.credits;
+      }
+      const dBal = $('#d-bal');
+      if (dBal) dBal.innerText = appState.credits + appState.dailyCredits;
       recordHistory(appState.user.uid, `Promo: ${pack.name} Pack`, pack.credits);
+      updateCreditUI();
     }).catch(e => showToast('Error updating credits.', 'err'));
   } else if (promoCode) {
     showToast('Invalid promo code.', 'err');
