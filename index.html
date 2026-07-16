@@ -1384,8 +1384,18 @@ function initGuestState() {
 }
 
 async function syncUserData() {
-  const ref = db.collection('users').doc(appState.user.uid);
+  const ref = db.collection("users").doc(appState.user.uid);
+  ref.onSnapshot((doc) => {
+    if (doc.exists) {
+      let data = doc.data();
+      appState.credits = parseInt(data.credits || 0, 10);
+      appState.dailyCredits = parseInt(data.dailyCredits || 0, 10);
+      appState.userData = data;
+      updateCreditUI();
+    }
+  });
   const snap = await ref.get();
+
 
   const today = new Date().toISOString().split('T')[0];
   let localC = parseInt(localStorage.getItem('sz_credits') || '0');
@@ -1543,29 +1553,36 @@ function flashCreditCounter(type) {
   b.style.transition = 'transform 0.1s';
   setTimeout(() => { b.style.transform = 'scale(1)'; b.style.transition = 'transform 0.3s'; }, 100);
 }
-
 async function deductCredits(cost) {
   if(cost <= 0) return true;
   let total = appState.credits + appState.dailyCredits;
   if(total < cost) {
-    openModal('outOfCreditsModal');
+    openModal("outOfCreditsModal");
     return false;
   }
 
-  if(appState.user && db) {
-    let deductDaily = Math.min(appState.dailyCredits, cost);
-    let deductPerm = cost - deductDaily;
+  let deductDaily = Math.min(appState.dailyCredits, cost);
+  let deductPerm = cost - deductDaily;
+  appState.dailyCredits -= deductDaily;
+  appState.credits -= deductPerm;
+  updateCreditUI();
 
-    await db.collection('users').doc(appState.user.uid).update({
-      dailyCredits: firebase.firestore.FieldValue.increment(-deductDaily),
-      credits: firebase.firestore.FieldValue.increment(-deductPerm),
-      creditsSpent: firebase.firestore.FieldValue.increment(cost)
-    });
+  if(appState.user && db) {
+    try {
+      await db.collection("users").doc(appState.user.uid).update({
+        dailyCredits: firebase.firestore.FieldValue.increment(-deductDaily),
+        credits: firebase.firestore.FieldValue.increment(-deductPerm),
+        creditsSpent: firebase.firestore.FieldValue.increment(cost)
+      });
+    } catch (e) {
+      appState.dailyCredits += deductDaily;
+      appState.credits += deductPerm;
+      updateCreditUI();
+      return false;
+    }
   } else {
-    appState.credits -= cost;
-    localStorage.setItem('sz_credits', appState.credits);
-    flashCreditCounter('warn');
-    updateCreditUI();
+    localStorage.setItem("sz_credits", appState.credits);
+    flashCreditCounter("warn");
   }
   return true;
 }
@@ -2217,17 +2234,19 @@ function buyCredits(packId) {
 
   if (promoCode === 'AIExpert_456456') {
     // Testing Promo Code Bypass
+    const bonusCredits = parseInt(pack.credits, 10);
+
     db.collection('users').doc(appState.user.uid).update({
-      credits: firebase.firestore.FieldValue.increment(pack.credits),
-      creditsEarned: firebase.firestore.FieldValue.increment(pack.credits)
+      credits: firebase.firestore.FieldValue.increment(bonusCredits),
+      creditsEarned: firebase.firestore.FieldValue.increment(bonusCredits)
     }).then(() => {
-      showToast(`🎉 Promo Code Applied! ${pack.credits} Credits added successfully.`, 'credit');
+      showToast(`🎉 Promo Code Applied! ${bonusCredits} Credits added successfully.`, 'credit');
       flashCreditCounter('glow');
       triggerConfetti();
-      appState.credits += pack.credits;
+      appState.credits += bonusCredits;
       if (appState.userData) {
          if (!appState.userData.credits) appState.userData.credits = 0;
-         appState.userData.credits += pack.credits;
+         appState.userData.credits += bonusCredits;
       }
       const dBal = $('#d-bal');
       if (dBal) dBal.innerText = appState.credits + appState.dailyCredits;
