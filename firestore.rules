@@ -2,10 +2,52 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Owners can write anything on their own doc. Additionally, allow any
+      // other signed-in user to bump ONLY credits/creditsEarned by exactly the
+      // +5 referral bonus, and nothing else — this is what lets a new signup's
+      // client deposit the referral reward into the referrer's account, which
+      // the old owner-only rule silently blocked (the referrer's doc has a
+      // different uid than the person triggering the write).
+      // TODO before real payments go live: move all credit mutations
+      // server-side (Cloud Functions) instead of trusting client writes at all
+      // — see the master prompt's "Security hardening" section.
+      allow write: if request.auth != null && (
+        request.auth.uid == userId ||
+        (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['credits', 'creditsEarned']) &&
+          request.resource.data.credits == resource.data.credits + 5 &&
+          request.resource.data.creditsEarned == resource.data.creditsEarned + 5
+        )
+      );
+
       match /qrcodes/{docId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
+
+      // NOTE: this collection was previously unmatched by any rule, which means
+      // Firestore's default-deny behavior silently blocked every read/write to it.
+      // That is what was breaking the "Credit History" tab and every promo/purchase
+      // ledger entry client-side code tried to write.
+      match /creditHistory/{docId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // NOTE: also previously unmatched -> also silently denied. This is what was
+    // breaking referral code creation on signup and referral bonus lookups.
+    match /referrals/{code} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null; // uses counter bump by the referring code's redeemer
+      allow delete: if false;
+    }
+
+    // Explicit default-deny for everything else, so any future collection you add
+    // fails loudly during development instead of silently like the ones above did.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
