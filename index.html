@@ -2489,7 +2489,11 @@ async function submitPromoCode() {
       15000,
       'Applying your code is taking too long. Check your connection and try again.'
     );
-    await recordHistory(appState.user.uid, `Promo: ${pack.name} Pack`, pack.credits);
+    await withTimeout(
+      recordHistory(appState.user.uid, `Promo: ${pack.name} Pack`, pack.credits),
+      15000,
+      'Saving your transaction history is taking too long.'
+    );
 
     pendingPromoPack = null;
     closeModal('promoModal');
