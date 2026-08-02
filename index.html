@@ -224,15 +224,24 @@
 
       <div id="d-set" class="d-panel" style="display:none;">
         <h3 style="font-size:24px; font-family:var(--font-d); margin-bottom: 24px;">Settings</h3>
-        <div class="input-group">
-          <label>Display Name</label>
-          <input type="text" id="set-name" disabled>
+
+        <div class="settings-card">
+          <h4>Account Details</h4>
+          <div class="input-group">
+            <label>Display Name</label>
+            <input type="text" id="set-name" disabled>
+          </div>
+          <div class="input-group">
+            <label>Email</label>
+            <input type="text" id="set-email" disabled>
+          </div>
         </div>
-        <div class="input-group">
-          <label>Email</label>
-          <input type="text" id="set-email" disabled>
+
+        <div class="settings-card">
+          <h4>Danger Zone</h4>
+          <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">Permanently remove your account and all generated QR codes.</p>
+          <button class="btn" style="background:rgba(255,77,106,0.1); color:var(--error); width:100%; border:1px solid rgba(255,77,106,0.2);" onclick="deleteAccount()">Delete Account</button>
         </div>
-        <button class="btn" style="background:rgba(255,77,106,0.1); color:var(--error); width:100%; margin-top:24px;" onclick="deleteAccount()">Delete Account</button>
       </div>
 
     </div>
@@ -533,6 +542,12 @@
   <!-- Right Side: Preview Panel -->
   <div class="preview-panel">
     <div class="qr-container" id="qr-wrap">
+      <div id="watermark-overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; opacity: 0.15; overflow: hidden;">
+         <!-- Watermark content will be repeating text via CSS or inline elements -->
+         <div style="font-size: 16px; font-weight: 800; font-family: var(--font-d); color: var(--text); position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; transform: rotate(-45deg); display: flex; flex-wrap: wrap; justify-content: center; align-content: center; text-align: center; line-height: 2;">
+            SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;SCANZAP PREVIEW&nbsp;&nbsp;&nbsp;
+         </div>
+      </div>
       <div class="qr-empty" id="qr-empty">
         <svg width="48" height="48" viewBox="0 0 38 38" fill="none" style="opacity: 0.2;">
           <rect width="38" height="38" rx="10" fill="currentColor"/>
@@ -552,7 +567,7 @@
 
     <div class="qr-meta" id="qr-meta" style="display:none;"></div>
 
-    <div class="qr-actions" id="qr-actions" style="display:none; position:relative; z-index:10;">
+    <div class="qr-actions" id="qr-actions" style="display:none;">
       <button class="btn btn-accent qr-action-overlay" style="padding:16px; font-size:16px; display:flex; justify-content:center; gap:8px;" onclick="downloadPNG()">⬇ Download PNG</button>
       <button class="btn btn-ghost qr-action-overlay" style="border:1px solid var(--border);" onclick="downloadSVG()">⬇ SVG <span style="color:var(--gold); font-size:12px; margin-left:8px;">3 cr</span></button>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">

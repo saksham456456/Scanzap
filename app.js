@@ -403,11 +403,13 @@ function renderNavAuth() {
       <div id="credit-badge" class="credit-badge" onclick="document.getElementById('shop').scrollIntoView()">
         ⚡ <span id="nav-credit-num">--</span>
       </div>
-      <div class="avatar-menu">
-        <button class="avatar-btn" onclick="this.parentElement.classList.toggle('active')">${initial}</button>
+      <div class="avatar-menu" id="avatarMenuContainer">
+        <button class="avatar-btn" onclick="this.parentElement.classList.toggle('active'); event.stopPropagation();">${initial}</button>
         <div class="avatar-dropdown">
           <a href="#" onclick="openDashboard(); this.parentElement.parentElement.classList.remove('active'); return false;">🏠 My Dashboard</a>
+          <a href="#" onclick="openDashboard(); setTimeout(() => document.querySelector('[data-dtab=\'d-history\']').click(), 100); this.parentElement.parentElement.classList.remove('active'); return false;">🕒 History</a>
           <a href="#" onclick="document.getElementById('shop').scrollIntoView(); this.parentElement.parentElement.classList.remove('active'); return false;">⚡ Top Up Credits</a>
+          <a href="#" onclick="openDashboard(); setTimeout(() => document.querySelector('[data-dtab=\'d-set\']').click(), 100); this.parentElement.parentElement.classList.remove('active'); return false;">⚙️ Settings</a>
           <a href="#" style="border-top:1px solid var(--border);" onclick="firebase.auth().signOut(); this.parentElement.parentElement.classList.remove('active'); return false;">↩ Sign Out</a>
         </div>
       </div>
@@ -821,7 +823,15 @@ async function buildCanvasQR() {
   if(url === appState.lastQRUrl && !appState.logoUrl) return;
   appState.lastQRUrl = url;
 
+
   empty.style.display = 'none';
+
+  // Toggle CSS watermark overlay for premium features (Logo applied)
+  if (appState.logoUrl) {
+    $('#watermark-overlay').style.display = 'block';
+  } else {
+    $('#watermark-overlay').style.display = 'none';
+  }
 
   try {
     const res = await fetch(url);
@@ -875,17 +885,6 @@ function showQRUI() {
   $('#qr-meta').innerText = `${appState.qrSize}×${appState.qrSize}px · ${$('#ecc-group .active').dataset.val} error correction`;
   $('#qr-actions').style.display = 'grid';
 
-  if (appState.user && db) {
-      db.collection('users').doc(appState.user.uid).collection('qrcodes').add({
-          type: appState.activeTab,
-          data: getQRDataString(),
-          fg: $('#c-fg').value,
-          bg: $('#c-bg').value,
-          ecc: $('#ecc-group .active').dataset.val,
-          size: appState.qrSize,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).catch(e => console.warn('Failed to save history'));
-  }
 
   // Nudge logic: shown once right after generation
   if(!appState.user && !sessionStorage.getItem('sz_nudge')) {
@@ -1325,3 +1324,12 @@ window.onload = () => {
   const p = new URLSearchParams(window.location.search);
   if(p.get('ref')) sessionStorage.setItem('sz_ref', p.get('ref'));
 };
+
+
+// Close avatar dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  const container = document.getElementById('avatarMenuContainer');
+  if (container && !container.contains(e.target)) {
+    container.classList.remove('active');
+  }
+});

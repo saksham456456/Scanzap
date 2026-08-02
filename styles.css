@@ -212,7 +212,63 @@ nav {
   max-width: 1200px; margin: 0 auto; padding: 0 24px 80px;
   display: grid; grid-template-columns: 1fr 380px; gap: 32px;
 }
-@media (max-width: 900px) { .generator-section { grid-template-columns: 1fr; } }
+
+
+@media (max-width: 900px) {
+  .generator-section {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
+@media (max-width: 768px) {
+  /* Task 2: Sticky Preview on Mobile */
+  .preview-panel {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: auto;
+    max-height: 40vh;
+    padding: 16px;
+    border-radius: 0 0 var(--r-xl) var(--r-xl);
+    border-top: none;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+  }
+
+  .qr-container {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 0;
+  }
+
+  /* Make the controls area scrollable independently if needed, though window scroll handles it fine if panel is sticky */
+
+  /* Sticky Action Bar at the bottom */
+  .qr-actions {
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 16px;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    z-index: 100 !important;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.5);
+  }
+  .qr-actions button {
+    flex: 1;
+    min-height: 48px; /* Touch target size */
+  }
+
+  /* Adjust the main content to not hide behind the sticky action bar */
+  .gen-main {
+    margin-bottom: 80px;
+  }
+}
+
 .gen-main {
   background: rgba(13, 13, 26, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.05); border-radius: var(--r-xl); overflow: hidden;
@@ -445,4 +501,81 @@ footer { border-top: 1px solid var(--border); padding: 80px 24px 40px; backgroun
 @keyframes confettiFall {
   0% { transform: translate3d(50vw, 50vh, 0) scale(0) rotate(0); opacity: 1; }
   100% { transform: translate3d(var(--tx), var(--ty), 0) scale(1) rotate(var(--rot)); opacity: 0; }
+}
+
+/* Task 3: Avatar Dropdown and Settings UI */
+.avatar-menu {
+  position: relative;
+  display: inline-block;
+}
+.avatar-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--border-hi);
+  color: var(--text);
+  font-family: var(--font-d);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px var(--primary-dim);
+}
+.avatar-btn:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 16px var(--primary-glow);
+}
+.avatar-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r-md);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+  width: 220px;
+  padding: 8px;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1000;
+}
+.avatar-menu.active .avatar-dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.avatar-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--r-sm);
+  transition: background 0.2s;
+}
+.avatar-dropdown a:hover {
+  background: var(--card-hover);
+}
+
+.settings-card {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r-md);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.settings-card h4 {
+  font-family: var(--font-d);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: white;
 }
